@@ -64,40 +64,38 @@ export function PomodoroView() {
   };
 
   return (
-    <div class="flex flex-1 flex-col gap-6">
-      <Panel>
-        <div class="flex flex-wrap justify-center gap-1">
-          {(Object.keys(MODES) as Mode[]).map((m) => (
-            <Button key={m} size="sm" variant={m === st.mode ? "secondary" : "ghost"} onClick={() => go(m)}>
-              {MODES[m]}
-            </Button>
-          ))}
-        </div>
-
-        <Display sub={{ focus: "concéntrate", short: "descansa", long: "relájate" }[st.mode]}>
-          {formatDuration(left)}
-        </Display>
-
-        <div class="h-1 w-full max-w-md overflow-hidden rounded-full bg-border">
-          <div
-            class="h-full bg-primary transition-[width] dark:bg-brand"
-            style={{ width: `${(1 - left / total) * 100}%` }}
-          />
-        </div>
-
-        <div class="flex items-center gap-2">
-          <Button variant="ghost" size="icon-lg" aria-label="Reiniciar" onClick={() => go(st.mode)}>
-            <RotateCcw />
+    <Panel>
+      <div class="flex flex-wrap justify-center gap-1">
+        {(Object.keys(MODES) as Mode[]).map((m) => (
+          <Button key={m} size="sm" variant={m === st.mode ? "secondary" : "ghost"} onClick={() => go(m)}>
+            {MODES[m]}
           </Button>
-          <Button size="lg" className={cn("h-12 w-40 text-base")} onClick={toggle}>
-            {st.endAt ? <Pause /> : <Play />}
-            {st.endAt ? "Pausar" : "Empezar"}
-          </Button>
-          <Button variant="ghost" size="icon-lg" aria-label="Saltar" onClick={() => next(false)}>
-            <SkipForward />
-          </Button>
-        </div>
-      </Panel>
-    </div>
+        ))}
+      </div>
+
+      <Display sub={{ focus: "concéntrate", short: "descansa", long: "relájate" }[st.mode]}>
+        {formatDuration(left)}
+      </Display>
+
+      <div class="h-1 w-full max-w-md overflow-hidden rounded-full bg-border">
+        <div
+          class="h-full bg-primary transition-[width] dark:bg-brand"
+          style={{ width: `${(1 - left / total) * 100}%` }}
+        />
+      </div>
+
+      <div class="flex items-center gap-2">
+        <Button variant="ghost" size="icon-lg" aria-label="Reiniciar" onClick={() => go(st.mode)}>
+          <RotateCcw />
+        </Button>
+        <Button size="lg" className={cn("h-12 w-40 text-base")} onClick={toggle}>
+          {st.endAt ? <Pause /> : <Play />}
+          {st.endAt ? "Pausar" : "Empezar"}
+        </Button>
+        <Button variant="ghost" size="icon-lg" aria-label="Saltar" onClick={() => next(false)}>
+          <SkipForward />
+        </Button>
+      </div>
+    </Panel>
   );
 }

@@ -53,7 +53,7 @@ export default function App() {
         </div>
       )}
 
-      <Tabs value={tab} onValueChange={select} className="flex-1 gap-8">
+      <Tabs value={tab} onValueChange={select} className="min-h-0 flex-1 gap-8">
         <TabsList
           variant="line"
           className="mx-auto max-w-full justify-start overflow-x-auto overflow-y-hidden pb-1.5 [scrollbar-width:none] group-data-horizontal/tabs:h-auto [&::-webkit-scrollbar]:hidden"
@@ -66,7 +66,7 @@ export default function App() {
         </TabsList>
 
         {TABS.map(({ id, View }) => (
-          <TabsContent key={id} value={id} forceMount className="flex flex-col duration-300 data-[state=active]:animate-in data-[state=active]:fade-in data-[state=inactive]:hidden motion-reduce:animate-none">
+          <TabsContent key={id} value={id} forceMount className="flex min-h-0 flex-col duration-300 data-[state=active]:animate-in data-[state=active]:fade-in data-[state=inactive]:hidden motion-reduce:animate-none">
             <View />
           </TabsContent>
         ))}

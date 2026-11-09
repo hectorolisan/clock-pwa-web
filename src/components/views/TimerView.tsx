@@ -40,33 +40,37 @@ export function TimerView() {
     setSt(st.endAt ? { ...st, endAt: st.endAt + ms } : { ...st, left: st.left + ms, duration: st.duration + ms });
 
   return (
-    <div class="flex flex-1 flex-col gap-6">
-      <Panel>
-        <Display sub={st.endAt ? "en marcha" : idle ? "listo" : "en pausa"}>
-          {formatDuration(left, { hours: st.duration >= 3_600_000 })}
-        </Display>
+    <Panel>
+      <Display sub={st.endAt ? "en marcha" : idle ? "listo" : "en pausa"}>
+        {formatDuration(left, { hours: st.duration >= 3_600_000 })}
+      </Display>
 
-        <div class="flex items-center gap-2">
-          <Button variant="ghost" size="icon-lg" aria-label="Reiniciar" onClick={() => set(st.duration)}>
-            <RotateCcw />
-          </Button>
-          <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
-            {st.endAt ? <Pause /> : <Play />}
-            {st.endAt ? "Pausar" : idle ? "Empezar" : "Reanudar"}
-          </Button>
-          <Button variant="ghost" size="lg" onClick={() => add(60_000)}>
-            <Plus /> 1 min
-          </Button>
-        </div>
-      </Panel>
+      <div class="flex items-center gap-2">
+        <Button variant="ghost" size="icon-lg" aria-label="Reiniciar" onClick={() => set(st.duration)}>
+          <RotateCcw />
+        </Button>
+        <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
+          {st.endAt ? <Pause /> : <Play />}
+          {st.endAt ? "Pausar" : idle ? "Empezar" : "Reanudar"}
+        </Button>
+        <Button variant="ghost" size="lg" onClick={() => add(60_000)}>
+          <Plus /> 1 min
+        </Button>
+      </div>
 
       <div class="flex flex-wrap justify-center gap-2">
         {PRESETS.map((m) => (
-          <Button key={m} variant="outline" size="sm" className="rounded-full font-mono" onClick={() => set(m * 60_000)}>
+          <Button
+            key={m}
+            variant="outline"
+            size="sm"
+            className="rounded-full font-mono"
+            onClick={() => set(m * 60_000)}
+          >
             {m} min
           </Button>
         ))}
       </div>
-    </div>
+    </Panel>
   );
 }

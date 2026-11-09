@@ -23,7 +23,7 @@ export function Display({
       <p
         class={cn(
           "font-pixel leading-none tracking-tight text-primary tabular-nums select-none dark:text-foreground",
-          "text-[clamp(3.5rem,16vw,10rem)]",
+          "text-[clamp(3rem,min(16vw,20vh),10rem)]",
           className,
         )}
       >
@@ -38,7 +38,7 @@ export function Panel({ children, class: className }: { children: ComponentChild
   return (
     <section
       class={cn(
-        "flex min-h-80 flex-1 flex-col items-center justify-center gap-8 rounded-xl border bg-muted/50 px-4 py-12 sm:px-8",
+        "flex min-h-0 flex-1 flex-col items-center justify-center-safe gap-6 overflow-y-auto rounded-xl border bg-muted/50 px-4 py-8 sm:px-8",
         className,
       )}
     >
