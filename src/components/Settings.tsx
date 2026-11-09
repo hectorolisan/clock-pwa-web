@@ -35,9 +35,9 @@ export default function Settings() {
         <DialogHeader>
           <DialogTitle className="font-pixel text-xl font-normal">{t("header.settings")}</DialogTitle>
         </DialogHeader>
-        <div class="flex flex-col divide-y">
+        <div class="flex flex-col divide-y [&>*]:py-4">
           {OPTIONS.map((o) => (
-            <Label key={o.key} className="justify-between gap-4 py-3">
+            <Label key={o.key} className="justify-between gap-4">
               <span class="flex flex-col gap-1">
                 {t(o.label)}
                 <span class="text-xs font-normal text-muted-foreground">{t(o.hint)}</span>
@@ -45,7 +45,7 @@ export default function Settings() {
               <Switch checked={settings.value[o.key]} onCheckedChange={(v) => set({ [o.key]: v })} />
             </Label>
           ))}
-          <div class="flex items-center justify-between gap-4 py-3">
+          <div class="flex items-center justify-between gap-4">
             <span class="text-sm font-medium" id="lang-label">
               {t("settings.language")}
             </span>
@@ -64,51 +64,49 @@ export default function Settings() {
               ))}
             </div>
           </div>
-          <div class="flex flex-col gap-3 py-3">
-            <div class="flex items-center justify-between gap-4">
-              <label for="sound" class="text-sm font-medium">
-                {t("settings.sound")}
-              </label>
-              <div class="flex items-center gap-1">
-                <select
-                  id="sound"
-                  value={settings.value.sound}
-                  onChange={(e) => set({ sound: e.currentTarget.value as Sound })}
-                  class="h-8 rounded-lg border bg-background px-2 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  {SOUNDS.map((x) => (
-                    <option key={x} value={x}>
-                      {t(`sound.${x}`)}
-                    </option>
-                  ))}
-                </select>
-                <Button variant="ghost" size="icon-sm" aria-label={t("settings.test")} onClick={test}>
-                  <Volume2 />
-                </Button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between gap-4">
-              <label for="volume" class="text-sm font-medium">
-                {t("settings.volume")}
-              </label>
-              <input
-                id="volume"
-                type="range"
-                min={0}
-                max={1}
-                step={0.05}
-                value={settings.value.volume}
-                aria-valuetext={`${Math.round(settings.value.volume * 100)} %`}
-                onChange={(e) => {
-                  set({ volume: Number(e.currentTarget.value) });
-                  test();
-                }}
-                class="w-40 accent-primary"
-              />
+          <div class="flex items-center justify-between gap-4">
+            <label for="sound" class="text-sm font-medium">
+              {t("settings.sound")}
+            </label>
+            <div class="flex items-center gap-1">
+              <select
+                id="sound"
+                value={settings.value.sound}
+                onChange={(e) => set({ sound: e.currentTarget.value as Sound })}
+                class="h-8 rounded-lg border bg-background px-2 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                {SOUNDS.map((x) => (
+                  <option key={x} value={x}>
+                    {t(`sound.${x}`)}
+                  </option>
+                ))}
+              </select>
+              <Button variant="ghost" size="icon-sm" aria-label={t("settings.test")} onClick={test}>
+                <Volume2 />
+              </Button>
             </div>
           </div>
+          <div class="flex items-center justify-between gap-4">
+            <label for="volume" class="text-sm font-medium">
+              {t("settings.volume")}
+            </label>
+            <input
+              id="volume"
+              type="range"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.value.volume}
+              aria-valuetext={`${Math.round(settings.value.volume * 100)} %`}
+              onChange={(e) => {
+                set({ volume: Number(e.currentTarget.value) });
+                test();
+              }}
+              class="w-40 accent-primary"
+            />
+          </div>
           {notifyPermission.value !== "unsupported" && (
-            <div class="flex items-center justify-between gap-4 py-3">
+            <div class="flex items-center justify-between gap-4">
               <span class="flex flex-col gap-1 text-sm font-medium">
                 {t("settings.notifications")}
                 <span class="text-xs font-normal text-muted-foreground">{t("settings.notificationsHint")}</span>
@@ -126,15 +124,17 @@ export default function Settings() {
               )}
             </div>
           )}
-          <fieldset class="flex flex-col gap-3 py-3">
-            <legend class="mb-3 text-sm font-medium">{t("settings.color")}</legend>
-            <div class="grid w-fit grid-cols-6 gap-3">
+          <div class="flex flex-col gap-3">
+            <span class="text-sm font-medium" id="color-label">
+              {t("settings.color")}
+            </span>
+            <div role="radiogroup" aria-labelledby="color-label" class="grid grid-cols-6 gap-3 p-0.5">
               {COLORS.map((c) => (
                 <label
                   key={c}
                   data-color={c}
                   title={c}
-                  class="relative size-9 cursor-pointer rounded-full bg-primary ring-offset-2 ring-offset-background has-checked:ring-2 has-checked:ring-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
+                  class="relative aspect-square w-full cursor-pointer rounded-full bg-[linear-gradient(90deg,var(--primary)_50%,var(--tick)_50%)] ring-offset-2 ring-offset-background has-checked:ring-2 has-checked:ring-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
                 >
                   <input
                     type="radio"
@@ -148,7 +148,7 @@ export default function Settings() {
                 </label>
               ))}
             </div>
-          </fieldset>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
