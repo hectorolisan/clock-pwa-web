@@ -66,7 +66,7 @@ export default function App() {
         </TabsList>
 
         {TABS.map(({ id, View }) => (
-          <TabsContent key={id} value={id} forceMount className="flex flex-col data-[state=inactive]:hidden">
+          <TabsContent key={id} value={id} forceMount className="flex flex-col duration-200 data-[state=active]:animate-in data-[state=active]:fade-in data-[state=active]:slide-in-from-bottom-2 data-[state=inactive]:hidden motion-reduce:animate-none">
             <View />
           </TabsContent>
         ))}
