@@ -99,9 +99,7 @@ export function AlarmView() {
         </ul>
       )}
 
-      <p class="eyebrow text-center text-muted-foreground">
-        {t("alarm.count", { n: alarms.length, max: MAX })}
-      </p>
+      <p class="eyebrow text-center text-muted-foreground">{t("alarm.count", { n: alarms.length, max: MAX })}</p>
 
       <TimeDialog
         open={editing !== null}

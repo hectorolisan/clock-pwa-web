@@ -5,10 +5,7 @@ import Footer from "@/sections/Footer.astro";
 import App from "@/components/App";
 ---
 
-<Layout
-  title="clock-pwa-web"
-  description="Reloj digital, pomodoro, cuenta atrás, temporizador, cronómetro y alarmas."
->
+<Layout title="clock-pwa-web" description="Reloj digital, pomodoro, cuenta atrás, temporizador, cronómetro y alarmas.">
   <Header />
   <main class="mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col px-4 py-8">
     <App client:only="preact" />

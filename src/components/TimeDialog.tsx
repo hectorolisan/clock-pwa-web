@@ -33,7 +33,7 @@ function Column<T extends string | number>({
       ref={list}
       role="listbox"
       aria-label={label}
-      class="flex h-56 flex-1 snap-y flex-col gap-1 overflow-y-auto rounded-lg border p-1 [scrollbar-width:none]"
+      class="flex h-56 flex-1 snap-y [scrollbar-width:none] flex-col gap-1 overflow-y-auto rounded-lg border p-1"
     >
       {items.map((v) => (
         <button

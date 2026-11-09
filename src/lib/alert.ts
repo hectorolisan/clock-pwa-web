@@ -31,8 +31,7 @@ const PATTERNS: Record<Sound, (out: AudioNode, t0: number) => void> = {
       tone(out, t0 + i * 0.14, f * 3.9, 0.06, 0.15);
     }),
   // Campana: parciales inarmónicos con caída larga
-  bell: (out, t0) =>
-    [1, 2.76, 5.4].forEach((m, i) => tone(out, t0, 660 * m, [0.3, 0.1, 0.05][i], 1.6 / (i + 1))),
+  bell: (out, t0) => [1, 2.76, 5.4].forEach((m, i) => tone(out, t0, 660 * m, [0.3, 0.1, 0.05][i], 1.6 / (i + 1))),
   // Despertador digital: 4 pitidos cuadrados
   digital: (out, t0) => [0, 0.12, 0.24, 0.36].forEach((d) => tone(out, t0 + d, 2000, 0.08, 0.08, "square")),
   // Suave: dos notas graves

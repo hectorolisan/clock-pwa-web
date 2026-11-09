@@ -5,7 +5,15 @@ import { cn } from "@/lib/utils";
 const dimColons = (children: ComponentChildren) =>
   toChildArray(children).map((c) =>
     typeof c === "string"
-      ? c.split(/(:)/).map((part, i) => (part === ":" ? <span key={i} class="text-muted-foreground">:</span> : part))
+      ? c.split(/(:)/).map((part, i) =>
+          part === ":" ? (
+            <span key={i} class="text-muted-foreground">
+              :
+            </span>
+          ) : (
+            part
+          ),
+        )
       : c,
   );
 
