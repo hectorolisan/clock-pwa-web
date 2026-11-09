@@ -41,15 +41,18 @@ export default function App() {
   return (
     <>
       {alertMessage.value && (
-        <div
-          role="alert"
-          class="fixed inset-x-4 top-4 z-50 mx-auto flex max-w-md items-center gap-3 rounded-xl border bg-background p-4 shadow-lg"
-        >
-          <BellRing className="size-5 animate-bounce text-brand" />
-          <p class="flex-1 text-sm font-medium">{alertMessage.value}</p>
-          <Button size="sm" onClick={stopAlert}>
-            Parar
-          </Button>
+        <div class="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 backdrop-blur-sm duration-300 animate-in fade-in">
+          <div
+            role="alertdialog"
+            aria-label={alertMessage.value}
+            class="flex w-full max-w-sm flex-col items-center gap-6 rounded-xl border bg-background p-8 text-center shadow-lg"
+          >
+            <BellRing className="size-10 animate-bounce text-brand" />
+            <p class="font-pixel text-2xl">{alertMessage.value}</p>
+            <Button size="lg" className="h-12 w-full text-base" onClick={stopAlert} autoFocus>
+              Parar
+            </Button>
+          </div>
         </div>
       )}
 
