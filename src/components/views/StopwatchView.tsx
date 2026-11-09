@@ -1,0 +1,87 @@
+import { Flag, Pause, Play, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Display, Panel } from "@/components/Display";
+import { useNow } from "@/hooks/useNow";
+import { useStored } from "@/hooks/useStored";
+import { formatDuration, pad } from "@/lib/time";
+import { cn } from "@/lib/utils";
+
+export function StopwatchView() {
+  const [st, setSt] = useStored("stopwatch", {
+    startAt: null as number | null,
+    elapsed: 0,
+    laps: [] as number[],
+  });
+
+  const now = useNow(31, st.startAt !== null);
+  const total = st.elapsed + (st.startAt ? now - st.startAt : 0);
+
+  const toggle = () =>
+    setSt(st.startAt ? { ...st, startAt: null, elapsed: total } : { ...st, startAt: Date.now() });
+
+  const lap = () => setSt({ ...st, laps: [...st.laps, total] });
+
+  const splits = st.laps.map((t, i) => t - (st.laps[i - 1] ?? 0));
+  const best = splits.length > 1 ? Math.min(...splits) : -1;
+  const worst = splits.length > 1 ? Math.max(...splits) : -1;
+
+  return (
+    <div class="flex flex-col gap-6">
+      <Panel>
+        <Display>
+          {formatDuration(total, { hours: total >= 3_600_000 })}
+          <span class="text-[0.45em] text-muted-foreground">.{pad((total % 1000) / 10)}</span>
+        </Display>
+
+        <div class="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon-lg"
+            aria-label="Reiniciar"
+            disabled={!total}
+            onClick={() => setSt({ startAt: null, elapsed: 0, laps: [] })}
+          >
+            <RotateCcw />
+          </Button>
+          <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
+            {st.startAt ? <Pause /> : <Play />}
+            {st.startAt ? "Parar" : total ? "Reanudar" : "Empezar"}
+          </Button>
+          <Button variant="ghost" size="icon-lg" aria-label="Vuelta" disabled={!st.startAt} onClick={lap}>
+            <Flag />
+          </Button>
+        </div>
+      </Panel>
+
+      {st.laps.length > 0 && (
+        <table class="mx-auto w-full max-w-md text-sm">
+          <thead>
+            <tr class="eyebrow border-b text-muted-foreground [&>th]:py-3 [&>th]:font-medium">
+              <th class="text-left">Vuelta</th>
+              <th class="text-right">Parcial</th>
+              <th class="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody class="font-mono text-xs">
+            {st.laps
+              .map((t, i) => (
+                <tr
+                  key={i}
+                  class={cn(
+                    "border-b text-muted-foreground hover:bg-muted [&>td]:py-2.5",
+                    splits[i] === best && "text-emerald-600 dark:text-emerald-400",
+                    splits[i] === worst && "text-red-600 dark:text-red-400",
+                  )}
+                >
+                  <td>#{pad(i + 1)}</td>
+                  <td class="text-right">{formatDuration(splits[i], { centis: true })}</td>
+                  <td class="text-right text-foreground">{formatDuration(t, { centis: true })}</td>
+                </tr>
+              ))
+              .reverse()}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
