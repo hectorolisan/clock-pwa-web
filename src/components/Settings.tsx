@@ -14,9 +14,10 @@ export default function Settings() {
     <Dialog>
       <DialogTrigger
         aria-label="Ajustes"
-        className="ml-auto inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="ml-auto inline-flex h-8 items-center justify-center gap-2 rounded-lg px-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       >
         <SettingsIcon className="size-4" />
+        <span class="hidden sm:inline">Ajustes</span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm" aria-describedby={undefined}>
         <DialogHeader>
