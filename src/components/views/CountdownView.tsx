@@ -11,6 +11,8 @@ import { pad } from "@/lib/time";
 const toLocalInput = (d: Date) =>
   `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
+const targetFmt = new Intl.DateTimeFormat("es-ES", { dateStyle: "full", timeStyle: "short" });
+
 const nextNewYear = () => toLocalInput(new Date(new Date().getFullYear() + 1, 0, 1));
 
 export function CountdownView() {
@@ -37,7 +39,7 @@ export function CountdownView() {
 
   return (
     <Panel>
-      <Display sub={!left && "¡Llegó el momento!"}>
+      <Display sub={left ? `Hasta el ${targetFmt.format(new Date(st.target))}` : "¡Llegó el momento!"}>
         {pad(s / 86400)}
         <span class="ml-[0.4em]">{pad((s / 3600) % 24)}</span>
         :
