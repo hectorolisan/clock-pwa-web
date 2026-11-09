@@ -1,13 +1,13 @@
 import { toChildArray, type ComponentChildren } from "preact";
 import { cn } from "@/lib/utils";
 
-/** Pinta los ":" de los textos en gris, como los segundos */
+/** Pinta los ":" con el tono secundario, como los segundos */
 const dimColons = (children: ComponentChildren) =>
   toChildArray(children).map((c) =>
     typeof c === "string"
       ? c.split(/(:)/).map((part, i) =>
           part === ":" ? (
-            <span key={i} class="text-muted-foreground">
+            <span key={i} class="text-tick">
               :
             </span>
           ) : (

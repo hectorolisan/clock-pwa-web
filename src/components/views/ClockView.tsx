@@ -92,7 +92,7 @@ export function ClockView() {
         sub={d.toLocaleDateString(locale.value, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
       >
         {pad(h)}:{pad(d.getMinutes())}
-        {opts.seconds && <span class="text-[0.45em] text-muted-foreground">{pad(d.getSeconds())}</span>}
+        {opts.seconds && <span class="text-[0.45em] text-tick">{pad(d.getSeconds())}</span>}
         {ampm && <span class="ml-2 text-[0.25em] text-muted-foreground">{ampm}</span>}
       </Display>
 

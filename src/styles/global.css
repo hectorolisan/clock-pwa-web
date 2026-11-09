@@ -31,6 +31,7 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --color-brand: var(--brand-text);
+  --color-tick: var(--tick);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -60,6 +61,7 @@
   --input: #e4e4e7;
   --ring: #4a5468;
   --brand-text: #333b4b;
+  --tick: #6b6b74;
   --radius: 0.5rem;
 }
 
@@ -84,95 +86,119 @@
   --input: #222222;
   --ring: #aab3c6;
   --brand-text: #aab3c6;
+  --tick: #8a8a97;
 }
 
 /* Color principal: tonos de Tailwind; 700 en los claros para mantener contraste con texto blanco */
 [data-color="default"] {
   --primary: #333b4b;
+  --tick: #6b6b74;
+}
+
+.dark[data-color="default"],
+.dark [data-color="default"] {
+  --tick: #8a8a97;
 }
 
 [data-color="red"] {
   --primary: var(--color-red-600);
+  --tick: var(--color-red-500);
   --ring: var(--color-red-500);
   --brand-text: var(--color-red-600);
 }
 [data-color="orange"] {
   --primary: var(--color-orange-700);
+  --tick: var(--color-orange-500);
   --ring: var(--color-orange-500);
   --brand-text: var(--color-orange-700);
 }
 [data-color="amber"] {
   --primary: var(--color-amber-700);
+  --tick: var(--color-amber-500);
   --ring: var(--color-amber-500);
   --brand-text: var(--color-amber-700);
 }
 [data-color="yellow"] {
   --primary: var(--color-yellow-700);
+  --tick: var(--color-yellow-500);
   --ring: var(--color-yellow-500);
   --brand-text: var(--color-yellow-700);
 }
 [data-color="lime"] {
   --primary: var(--color-lime-700);
+  --tick: var(--color-lime-500);
   --ring: var(--color-lime-500);
   --brand-text: var(--color-lime-700);
 }
 [data-color="green"] {
   --primary: var(--color-green-700);
+  --tick: var(--color-green-500);
   --ring: var(--color-green-500);
   --brand-text: var(--color-green-700);
 }
 [data-color="emerald"] {
   --primary: var(--color-emerald-600);
+  --tick: var(--color-emerald-500);
   --ring: var(--color-emerald-500);
   --brand-text: var(--color-emerald-600);
 }
 [data-color="teal"] {
   --primary: var(--color-teal-600);
+  --tick: var(--color-teal-500);
   --ring: var(--color-teal-500);
   --brand-text: var(--color-teal-600);
 }
 [data-color="cyan"] {
   --primary: var(--color-cyan-600);
+  --tick: var(--color-cyan-500);
   --ring: var(--color-cyan-500);
   --brand-text: var(--color-cyan-600);
 }
 [data-color="sky"] {
   --primary: var(--color-sky-600);
+  --tick: var(--color-sky-500);
   --ring: var(--color-sky-500);
   --brand-text: var(--color-sky-600);
 }
 [data-color="blue"] {
   --primary: var(--color-blue-600);
+  --tick: var(--color-blue-500);
   --ring: var(--color-blue-500);
   --brand-text: var(--color-blue-600);
 }
 [data-color="indigo"] {
   --primary: var(--color-indigo-600);
+  --tick: var(--color-indigo-500);
   --ring: var(--color-indigo-500);
   --brand-text: var(--color-indigo-600);
 }
 [data-color="violet"] {
   --primary: var(--color-violet-600);
+  --tick: var(--color-violet-500);
   --ring: var(--color-violet-500);
   --brand-text: var(--color-violet-600);
 }
 [data-color="purple"] {
   --primary: var(--color-purple-600);
+  --tick: var(--color-purple-500);
   --ring: var(--color-purple-500);
   --brand-text: var(--color-purple-600);
 }
 [data-color="fuchsia"] {
   --primary: var(--color-fuchsia-600);
+  --tick: var(--color-fuchsia-500);
   --ring: var(--color-fuchsia-500);
   --brand-text: var(--color-fuchsia-600);
 }
 [data-color="pink"] {
   --primary: var(--color-pink-600);
+  --tick: var(--color-pink-500);
   --ring: var(--color-pink-500);
   --brand-text: var(--color-pink-600);
 }
 [data-color="rose"] {
   --primary: var(--color-rose-600);
+  --tick: var(--color-rose-500);
   --ring: var(--color-rose-500);
   --brand-text: var(--color-rose-600);
 }
@@ -180,86 +206,103 @@
 .dark[data-color="red"],
 .dark [data-color="red"] {
   --ring: var(--color-red-400);
+  --tick: var(--color-red-400);
   --brand-text: var(--color-red-400);
 }
 .dark[data-color="orange"],
 .dark [data-color="orange"] {
   --ring: var(--color-orange-400);
+  --tick: var(--color-orange-400);
   --brand-text: var(--color-orange-400);
 }
 .dark[data-color="amber"],
 .dark [data-color="amber"] {
   --ring: var(--color-amber-400);
+  --tick: var(--color-amber-400);
   --brand-text: var(--color-amber-400);
 }
 .dark[data-color="yellow"],
 .dark [data-color="yellow"] {
   --ring: var(--color-yellow-400);
+  --tick: var(--color-yellow-400);
   --brand-text: var(--color-yellow-400);
 }
 .dark[data-color="lime"],
 .dark [data-color="lime"] {
   --ring: var(--color-lime-400);
+  --tick: var(--color-lime-400);
   --brand-text: var(--color-lime-400);
 }
 .dark[data-color="green"],
 .dark [data-color="green"] {
   --ring: var(--color-green-400);
+  --tick: var(--color-green-400);
   --brand-text: var(--color-green-400);
 }
 .dark[data-color="emerald"],
 .dark [data-color="emerald"] {
   --ring: var(--color-emerald-400);
+  --tick: var(--color-emerald-400);
   --brand-text: var(--color-emerald-400);
 }
 .dark[data-color="teal"],
 .dark [data-color="teal"] {
   --ring: var(--color-teal-400);
+  --tick: var(--color-teal-400);
   --brand-text: var(--color-teal-400);
 }
 .dark[data-color="cyan"],
 .dark [data-color="cyan"] {
   --ring: var(--color-cyan-400);
+  --tick: var(--color-cyan-400);
   --brand-text: var(--color-cyan-400);
 }
 .dark[data-color="sky"],
 .dark [data-color="sky"] {
   --ring: var(--color-sky-400);
+  --tick: var(--color-sky-400);
   --brand-text: var(--color-sky-400);
 }
 .dark[data-color="blue"],
 .dark [data-color="blue"] {
   --ring: var(--color-blue-400);
+  --tick: var(--color-blue-400);
   --brand-text: var(--color-blue-400);
 }
 .dark[data-color="indigo"],
 .dark [data-color="indigo"] {
   --ring: var(--color-indigo-400);
+  --tick: var(--color-indigo-400);
   --brand-text: var(--color-indigo-400);
 }
 .dark[data-color="violet"],
 .dark [data-color="violet"] {
   --ring: var(--color-violet-400);
+  --tick: var(--color-violet-400);
   --brand-text: var(--color-violet-400);
 }
 .dark[data-color="purple"],
 .dark [data-color="purple"] {
   --ring: var(--color-purple-400);
+  --tick: var(--color-purple-400);
   --brand-text: var(--color-purple-400);
 }
 .dark[data-color="fuchsia"],
 .dark [data-color="fuchsia"] {
   --ring: var(--color-fuchsia-400);
+  --tick: var(--color-fuchsia-400);
   --brand-text: var(--color-fuchsia-400);
 }
 .dark[data-color="pink"],
 .dark [data-color="pink"] {
   --ring: var(--color-pink-400);
+  --tick: var(--color-pink-400);
   --brand-text: var(--color-pink-400);
 }
 .dark[data-color="rose"],
 .dark [data-color="rose"] {
   --ring: var(--color-rose-400);
+  --tick: var(--color-rose-400);
   --brand-text: var(--color-rose-400);
 }
 

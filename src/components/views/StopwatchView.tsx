@@ -55,7 +55,7 @@ export function StopwatchView({ active }: { active: boolean }) {
     <Panel>
       <Display>
         {formatDuration(total, { hours: total >= 3_600_000 })}
-        <span class="text-[0.45em] text-muted-foreground">.{pad((total % 1000) / 10)}</span>
+        <span class="text-[0.45em] text-tick">.{pad((total % 1000) / 10)}</span>
       </Display>
 
       <div class="flex items-center gap-2">
