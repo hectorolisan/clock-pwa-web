@@ -1,0 +1,31 @@
+---
+import { Code } from "lucide-react";
+import Heart from "../assets/svg/Heart.astro";
+
+const repo = "https://github.com/hectorolisan/clock-web";
+---
+
+<footer
+  class="flex flex-wrap items-center justify-center gap-1.5 px-4 pt-10 pb-6 font-mono text-[11px] tracking-widest text-muted-foreground"
+>
+  <Heart />
+  Desarrollado por
+  <a
+    href="https://hectorolisan.dev/"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="underline underline-offset-2 transition-colors hover:text-foreground"
+  >
+    hectorolisan
+  </a>
+  <span aria-hidden="true">·</span>
+  <a
+    href={repo}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 transition-colors hover:bg-muted hover:text-foreground"
+  >
+    <Code className="size-3" />
+    Código
+  </a>
+</footer>

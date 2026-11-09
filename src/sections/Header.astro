@@ -1,0 +1,29 @@
+---
+import { Clock, Moon, Sun } from "lucide-react";
+---
+
+<header class="border-b">
+  <div class="mx-auto flex h-14 max-w-5xl items-center gap-3 px-4">
+    <a href={import.meta.env.BASE_URL} class="flex items-center gap-2 text-brand">
+      <Clock className="size-4" />
+      <span class="font-mono text-xs">clock-web</span>
+    </a>
+
+    <button
+      type="button"
+      data-theme-toggle
+      aria-label="Cambiar tema"
+      class="ml-auto inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+    >
+      <Moon className="size-4 dark:hidden" />
+      <Sun className="hidden size-4 dark:block" />
+    </button>
+  </div>
+</header>
+
+<script>
+  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    const dark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  });
+</script>
