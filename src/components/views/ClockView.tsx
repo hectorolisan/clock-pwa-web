@@ -18,7 +18,7 @@ export function ClockView() {
   const ampm = opts.h24 ? "" : d.getHours() < 12 ? "AM" : "PM";
 
   return (
-    <Panel class="min-h-80 justify-center">
+    <Panel>
       <Display sub={dateFmt.format(d)}>
         {pad(h)}
         <span class="animate-pulse">:</span>

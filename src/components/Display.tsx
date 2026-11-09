@@ -14,7 +14,7 @@ export function Display({
     <div class="flex flex-col items-center gap-3">
       <p
         class={cn(
-          "font-pixel leading-none tracking-tight tabular-nums select-none",
+          "font-pixel leading-none tracking-tight text-primary tabular-nums select-none dark:text-foreground",
           "text-[clamp(3.5rem,16vw,10rem)]",
           className,
         )}
@@ -30,7 +30,7 @@ export function Panel({ children, class: className }: { children: ComponentChild
   return (
     <section
       class={cn(
-        "flex flex-col items-center gap-8 rounded-xl border bg-muted/50 px-4 py-12 sm:px-8",
+        "flex min-h-80 flex-1 flex-col items-center justify-center gap-8 rounded-xl border bg-muted/50 px-4 py-12 sm:px-8",
         className,
       )}
     >

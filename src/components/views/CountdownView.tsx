@@ -36,7 +36,7 @@ export function CountdownView() {
   const s = Math.floor(left / 1000);
 
   return (
-    <Panel class="min-h-80 justify-center">
+    <Panel>
       <Display sub={!left && "¡Llegó el momento!"}>
         {pad(s / 86400)}
         <span class="ml-[0.4em]">{pad((s / 3600) % 24)}</span>

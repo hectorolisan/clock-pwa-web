@@ -64,7 +64,7 @@ export function PomodoroView() {
   };
 
   return (
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-1 flex-col gap-6">
       <Panel>
         <div class="flex flex-wrap justify-center gap-1">
           {(Object.keys(MODES) as Mode[]).map((m) => (

@@ -26,7 +26,7 @@ export function StopwatchView() {
   const worst = splits.length > 1 ? Math.max(...splits) : -1;
 
   return (
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-1 flex-col gap-6">
       <Panel>
         <Display>
           {formatDuration(total, { hours: total >= 3_600_000 })}

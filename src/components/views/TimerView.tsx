@@ -40,7 +40,7 @@ export function TimerView() {
     setSt(st.endAt ? { ...st, endAt: st.endAt + ms } : { ...st, left: st.left + ms, duration: st.duration + ms });
 
   return (
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-1 flex-col gap-6">
       <Panel>
         <Display sub={st.endAt ? "en marcha" : idle ? "listo" : "en pausa"}>
           {formatDuration(left, { hours: st.duration >= 3_600_000 })}
