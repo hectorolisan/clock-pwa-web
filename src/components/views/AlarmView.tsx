@@ -64,7 +64,7 @@ export function AlarmView() {
 
   return (
     <div class="flex flex-col gap-6">
-      <Button className="mx-auto" disabled={full} onClick={add}>
+      <Button size="lg" className="mx-auto h-12 w-48 text-base" disabled={full} onClick={add}>
         <BellPlus /> Añadir alarma
       </Button>
 
