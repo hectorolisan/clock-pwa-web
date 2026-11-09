@@ -85,9 +85,26 @@ export function AlarmView() {
           {alarms.map((a) => (
             <li key={a.id} class="flex items-center gap-4 py-4">
               <div class="flex-1">
-                <p class={cn("font-pixel text-4xl tabular-nums", !a.on && "text-muted-foreground")}>
-                  {formatHHMM(a.time, settings.value.h24)}
-                </p>
+                <label class="relative inline-block cursor-pointer rounded-md transition-opacity hover:opacity-80 has-focus-visible:ring-3 has-focus-visible:ring-ring/50">
+                  <span class={cn("font-pixel text-4xl tabular-nums", !a.on && "text-muted-foreground")}>
+                    {formatHHMM(a.time, settings.value.h24)}
+                  </span>
+                  {/* Input invisible encima: abre el selector nativo de hora */}
+                  <input
+                    type="time"
+                    required
+                    aria-label="Cambiar hora"
+                    value={a.time}
+                    onClick={(e) => e.currentTarget.showPicker?.()}
+                    onChange={(e) => {
+                      const t = e.currentTarget.value;
+                      if (!t) return;
+                      const next = alarms.map((x) => (x.id === a.id ? { ...x, time: t, on: true } : x));
+                      setAlarms(next.sort((x, y) => x.time.localeCompare(y.time)));
+                    }}
+                    class="absolute inset-0 cursor-pointer opacity-0"
+                  />
+                </label>
                 <p class="mt-1 font-mono text-xs text-muted-foreground">
                   {a.on ? fmtLeft(untilNext(a.time, now)) : "Desactivada"}
                 </p>
