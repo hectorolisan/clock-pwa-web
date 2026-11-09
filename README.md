@@ -8,6 +8,7 @@ Timers keep running across tab switches and reloads, and work offline once insta
 - **Tailwind CSS 4** + **shadcn/ui** (Radix) — utility styling and UI components.
 - **@vite-pwa/astro** — service worker, manifest, icons and app shortcuts.
 - **Fontsource** — self-hosted Geist, Geist Mono and Geist Pixel fonts.
+- **Vitest** + **Testing Library** — unit tests; **Oxlint** + **Prettier** — linting and formatting.
 - **pnpm** — package manager.
 
 > Alarms only ring while the app is open (tab or backgrounded PWA): the web cannot wake the device without a push server.
@@ -16,18 +17,23 @@ Timers keep running across tab switches and reloads, and work offline once insta
 
 ## Tools
 
-| Tab          | Hash         | Description                                              |
-| :----------- | :----------- | :------------------------------------------------------- |
-| Reloj        | `#clock`     | Digital clock with 12/24 h and seconds settings          |
-| Pomodoro     | `#pomodoro`  | Work/break cycles                                        |
-| Cuenta atrás | `#countdown` | Countdown to a target time                               |
-| Temporizador | `#timer`     | Timer with a set duration                                |
-| Cronómetro   | `#stopwatch` | Stopwatch                                                |
-| Alarma       | `#alarm`     | Alarms with sound and system notification                |
+| Tab          | Hash         | Description                                                                                 |
+| :----------- | :----------- | :------------------------------------------------------------------------------------------ |
+| Reloj        | `#clock`     | Digital clock with 12/24 h and seconds settings, plus a world clock with up to 8 time zones |
+| Pomodoro     | `#pomodoro`  | Work/break cycles with configurable durations, auto-start and daily cycle counter           |
+| Cuenta atrás | `#countdown` | Countdown to a target date and time                                                         |
+| Temporizador | `#timer`     | Up to 6 timers running at the same time, with presets and +1 min                            |
+| Cronómetro   | `#stopwatch` | Stopwatch with laps (best/worst split), CSV export and copy                                 |
+| Alarma       | `#alarm`     | Up to 3 alarms with sound and system notification                                           |
 
 - **Tabs** are synced with the URL hash, so each tool can be bookmarked or opened from the PWA shortcuts.
 - **Persistence**: state is saved in `localStorage`; timers store their end timestamp (`endAt`), so they survive reloads.
-- **Alerts**: Web Audio beep + system notification, with a global banner in the app.
+- **Alerts**: synthesized Web Audio sounds (xylophone, bell, digital, soft) with adjustable volume + system notification, with a global banner in the app.
+- **Status**: the running tool shows its remaining time in the tab title and a progress ring in the favicon, and keeps the screen on (Screen Wake Lock).
+- **Keyboard**: `Space`/`K` start/pause, `R` reset, `L` lap, `N` skip pomodoro phase, `1`–`6` switch tab.
+- **Theme**: light/dark mode and primary color picker from the Tailwind palette (`#333b4b` by default).
+- **Languages**: Spanish and English, detected from the browser and switchable in settings.
+- **Accessibility**: `aria-live` announcements, `role="timer"`, keyboard hints, reduced motion and WCAG AA contrast.
 
 ## Project Structure
 
@@ -55,13 +61,19 @@ Timers keep running across tab switches and reloads, and work offline once insta
 │   │   └── TimeDialog.tsx       # Time picker dialog
 │   ├── hooks/
 │   │   ├── useNow.ts            # Current time ticker
+│   │   ├── useShortcuts.ts      # Per-view keyboard shortcuts
 │   │   └── useStored.ts         # localStorage-persisted state
 │   ├── layouts/
 │   │   └── Layout.astro
 │   ├── lib/
-│   │   ├── alert.ts             # Web Audio beep + notification
+│   │   ├── alert.ts             # Web Audio sounds + notification
+│   │   ├── announce.ts          # aria-live announcer
+│   │   ├── i18n.ts              # es/en dictionaries + t()
 │   │   ├── settings.ts          # Global settings signal
-│   │   ├── time.ts              # Time formatting
+│   │   ├── status.ts            # Tab title, favicon progress and wake lock
+│   │   ├── theme.ts             # Primary color
+│   │   ├── time.ts              # Time formatting and time zones
+│   │   ├── timer.ts             # Pure countdown, pomodoro, alarm and lap logic
 │   │   ├── title.ts             # Browser tab title
 │   │   └── utils.ts
 │   ├── pages/
@@ -73,22 +85,28 @@ Timers keep running across tab switches and reloads, and work offline once insta
 │   │   └── global.css           # Tailwind + theme tokens
 │   ├── env.d.ts
 │   └── pwa.ts                   # Service worker registration
+├── .oxlintrc.json
+├── .prettierrc.json
 ├── AGENTS.md
 ├── astro.config.mjs             # Preact + PWA manifest
 ├── components.json              # shadcn/ui config
 ├── LICENSE
 ├── package.json
 ├── tsconfig.json
+├── vitest.config.ts
 └── README.md
 ```
 
 ## Available Scripts
 
-| Command        | Action                                                  |
-| :------------- | :------------------------------------------------------ |
-| `pnpm install` | Install all dependencies                                |
-| `pnpm dev`     | Start dev server at `localhost:4321`                    |
-| `pnpm build`   | Build into `./dist/` with service worker and manifest   |
-| `pnpm preview` | Preview the production build (installable/offline PWA)  |
+| Command        | Action                                                 |
+| :------------- | :----------------------------------------------------- |
+| `pnpm install` | Install all dependencies                               |
+| `pnpm dev`     | Start dev server at `localhost:4321`                   |
+| `pnpm build`   | Build into `./dist/` with service worker and manifest  |
+| `pnpm preview` | Preview the production build (installable/offline PWA) |
+| `pnpm lint`    | Run Oxlint                                             |
+| `pnpm format`  | Format with Prettier (`format:check` to verify)        |
+| `pnpm test`    | Run Vitest                                             |
 
 > You can also use `npm` or `bun` if you prefer.
