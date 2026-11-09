@@ -6,7 +6,8 @@ import { Switch } from "@/components/ui/switch";
 import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { requestNotifications, startAlert, unlockAudio } from "@/lib/alert";
-import { pad } from "@/lib/time";
+import { settings } from "@/lib/settings";
+import { formatHHMM, pad } from "@/lib/time";
 import { cn } from "@/lib/utils";
 
 type Alarm = { id: number; time: string; label: string; on: boolean; daily: boolean };
@@ -94,7 +95,9 @@ export function AlarmView() {
           {alarms.map((a) => (
             <li key={a.id} class="flex items-center gap-4 py-4">
               <div class="flex-1">
-                <p class={cn("font-pixel text-4xl tabular-nums", !a.on && "text-muted-foreground")}>{a.time}</p>
+                <p class={cn("font-pixel text-4xl tabular-nums", !a.on && "text-muted-foreground")}>
+                  {formatHHMM(a.time, settings.value.h24)}
+                </p>
                 <p class="mt-1 font-mono text-xs text-muted-foreground">
                   {a.label || "Alarma"}
                   {a.on && ` · ${fmtLeft(untilNext(a.time, now))}`}

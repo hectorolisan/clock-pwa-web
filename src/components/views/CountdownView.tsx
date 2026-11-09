@@ -3,6 +3,7 @@ import { Display, Panel } from "@/components/Display";
 import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { requestNotifications, startAlert, unlockAudio } from "@/lib/alert";
+import { settings } from "@/lib/settings";
 import { pad } from "@/lib/time";
 
 const toLocalInput = (d: Date) =>
@@ -55,7 +56,7 @@ export function CountdownView() {
             <span class="ml-[0.4em]">{pad((s / 3600) % 24)}</span>
             <span class="animate-pulse">:</span>
             {pad((s / 60) % 60)}
-            <span class="text-[0.45em] text-muted-foreground">{pad(s % 60)}</span>
+            {settings.value.seconds && <span class="text-[0.45em] text-muted-foreground">{pad(s % 60)}</span>}
           </Display>
         </button>
         {/* Input oculto: solo aporta el selector nativo de fecha */}

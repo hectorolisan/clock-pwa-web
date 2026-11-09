@@ -10,3 +10,10 @@ export function formatDuration(ms: number, { hours = false, centis = false } = {
   const tail = centis ? `.${pad((total % 1000) / 10)}` : "";
   return head + body + tail;
 }
+
+/** "19:30" -> "07:30 PM" si no es formato 24 h */
+export function formatHHMM(hhmm: string, h24: boolean) {
+  if (h24) return hhmm;
+  const [h, m] = hhmm.split(":").map(Number);
+  return `${pad(h % 12 || 12)}:${pad(m)} ${h < 12 ? "AM" : "PM"}`;
+}

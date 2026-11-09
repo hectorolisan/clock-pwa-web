@@ -1,11 +1,9 @@
 import { useRef } from "preact/hooks";
 import { Maximize } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Display, Panel } from "@/components/Display";
 import { useNow } from "@/hooks/useNow";
-import { useStored } from "@/hooks/useStored";
+import { settings } from "@/lib/settings";
 import { pad } from "@/lib/time";
 
 const dateFmt = new Intl.DateTimeFormat("es-ES", {
@@ -16,7 +14,7 @@ const dateFmt = new Intl.DateTimeFormat("es-ES", {
 });
 
 export function ClockView() {
-  const [opts, setOpts] = useStored("clock", { h24: true, seconds: true });
+  const opts = settings.value;
   const panel = useRef<HTMLDivElement>(null);
   const d = new Date(useNow(500));
 
@@ -37,15 +35,7 @@ export function ClockView() {
         </Panel>
       </div>
 
-      <div class="flex flex-wrap items-center justify-center gap-6">
-        <Label className="gap-2">
-          <Switch checked={opts.h24} onCheckedChange={(h24) => setOpts({ ...opts, h24 })} />
-          24 h
-        </Label>
-        <Label className="gap-2">
-          <Switch checked={opts.seconds} onCheckedChange={(seconds) => setOpts({ ...opts, seconds })} />
-          Segundos
-        </Label>
+      <div class="flex justify-center">
         <Button variant="outline" onClick={() => panel.current?.requestFullscreen()}>
           <Maximize /> Pantalla completa
         </Button>
