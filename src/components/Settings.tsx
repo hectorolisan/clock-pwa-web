@@ -4,32 +4,34 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { settings } from "@/lib/settings";
 import { COLORS, color } from "@/lib/theme";
+import { LANGS, lang, t, type Lang } from "@/lib/i18n";
+import { Button } from "@/components/ui/button";
 
 const OPTIONS = [
-  { key: "h24", label: "Formato 24 h", hint: "Si se desactiva, usa AM/PM." },
-  { key: "seconds", label: "Mostrar segundos", hint: "En el reloj y la cuenta atrás." },
+  { key: "h24", label: "settings.h24", hint: "settings.h24Hint" },
+  { key: "seconds", label: "settings.seconds", hint: "settings.secondsHint" },
 ] as const;
 
 export default function Settings() {
   return (
     <Dialog>
       <DialogTrigger
-        aria-label="Ajustes"
+        aria-label={t("header.settings")}
         className="ml-auto inline-flex h-8 items-center justify-center gap-2 rounded-lg px-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       >
         <SettingsIcon className="size-4" />
-        <span class="hidden sm:inline">Ajustes</span>
+        <span class="hidden sm:inline">{t("header.settings")}</span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="font-pixel text-xl font-normal">Ajustes</DialogTitle>
+          <DialogTitle className="font-pixel text-xl font-normal">{t("header.settings")}</DialogTitle>
         </DialogHeader>
         <div class="flex flex-col divide-y">
           {OPTIONS.map((o) => (
             <Label key={o.key} className="justify-between gap-4 py-3">
               <span class="flex flex-col gap-1">
-                {o.label}
-                <span class="text-xs font-normal text-muted-foreground">{o.hint}</span>
+                {t(o.label)}
+                <span class="text-xs font-normal text-muted-foreground">{t(o.hint)}</span>
               </span>
               <Switch
                 checked={settings.value[o.key]}
@@ -37,8 +39,25 @@ export default function Settings() {
               />
             </Label>
           ))}
+          <div class="flex items-center justify-between gap-4 py-3">
+            <span class="text-sm font-medium" id="lang-label">{t("settings.language")}</span>
+            <div role="radiogroup" aria-labelledby="lang-label" class="flex gap-1">
+              {(Object.keys(LANGS) as Lang[]).map((l) => (
+                <Button
+                  key={l}
+                  size="sm"
+                  role="radio"
+                  aria-checked={lang.value === l}
+                  variant={lang.value === l ? "secondary" : "ghost"}
+                  onClick={() => (lang.value = l)}
+                >
+                  {LANGS[l]}
+                </Button>
+              ))}
+            </div>
+          </div>
           <fieldset class="flex flex-col gap-3 py-3">
-            <legend class="mb-3 text-sm font-medium">Color principal</legend>
+            <legend class="mb-3 text-sm font-medium">{t("settings.color")}</legend>
             <div class="flex flex-wrap gap-2">
               {COLORS.map((c) => (
                 <label

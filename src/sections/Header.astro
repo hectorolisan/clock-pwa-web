@@ -6,7 +6,7 @@ import Settings from "@/components/Settings";
 <header class="border-b">
   <div class="mx-auto flex h-14 max-w-5xl items-center gap-3 px-4">
     <a href={import.meta.env.BASE_URL} class="flex items-center gap-2 text-brand">
-      <Clock className="size-4" />
+      <Clock className="size-4" aria-hidden="true" />
       <span class="font-mono text-xs">clock-pwa-web</span>
     </a>
 
@@ -18,11 +18,12 @@ import Settings from "@/components/Settings";
       type="button"
       data-theme-toggle
       aria-label="Cambiar tema"
+      data-i18n-label="header.themeToggle"
       class="inline-flex h-8 items-center justify-center gap-2 rounded-lg px-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
     >
-      <Moon className="size-4 dark:hidden" />
-      <Sun className="hidden size-4 dark:block" />
-      <span class="hidden sm:inline">Tema</span>
+      <Moon className="size-4 dark:hidden" aria-hidden="true" />
+      <Sun className="hidden size-4 dark:block" aria-hidden="true" />
+      <span class="hidden sm:inline" data-i18n="header.theme">Tema</span>
     </button>
   </div>
 </header>

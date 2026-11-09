@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { settings } from "@/lib/settings";
 import { pad } from "@/lib/time";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
@@ -63,17 +64,17 @@ function TimeColumns({ value, onChange }: { value: string; onChange: (v: string)
   return (
     <div class="flex gap-2">
       {h24 ? (
-        <Column label="Hora" items={range(24)} selected={h} render={pad} onSelect={(v) => set(v)} />
+        <Column label={t("time.hour")} items={range(24)} selected={h} render={pad} onSelect={(v) => set(v)} />
       ) : (
         <Column
-          label="Hora"
+          label={t("time.hour")}
           items={range(12).map((i) => i || 12)}
           selected={h % 12 || 12}
           render={pad}
           onSelect={(v) => set((v % 12) + (pm ? 12 : 0))}
         />
       )}
-      <Column label="Minutos" items={range(60)} selected={m} render={pad} onSelect={(v) => set(h, v)} />
+      <Column label={t("time.minutes")} items={range(60)} selected={m} render={pad} onSelect={(v) => set(h, v)} />
       {!h24 && (
         <Column
           label="AM/PM"
@@ -135,7 +136,7 @@ export function TimeDialog({
               onOpenChange(false);
             }}
           >
-            Aceptar
+            {t("action.accept")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -8,11 +8,10 @@ import { useStored } from "@/hooks/useStored";
 import { requestNotifications, startAlert, unlockAudio } from "@/lib/alert";
 import { settings } from "@/lib/settings";
 import { formatHHMM, pad } from "@/lib/time";
+import { t, locale } from "@/lib/i18n";
 
 const toLocalInput = (d: Date) =>
   `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-
-const dateFmt = new Intl.DateTimeFormat("es-ES", { dateStyle: "full" });
 
 const nextNewYear = () => toLocalInput(new Date(new Date().getFullYear() + 1, 0, 1));
 
@@ -25,7 +24,7 @@ export function CountdownView() {
   useEffect(() => {
     if (!left && !st.done) {
       setSt({ ...st, done: true });
-      startAlert("¡Cuenta atrás terminada!");
+      startAlert(t("countdown.done"));
     }
   }, [left]);
 
@@ -42,8 +41,8 @@ export function CountdownView() {
       <Display
         sub={
           left
-            ? `${dateFmt.format(new Date(st.target))}, ${formatHHMM(st.target.slice(11), settings.value.h24)}`
-            : "¡Llegó el momento!"
+            ? `${new Date(st.target).toLocaleDateString(locale.value, { dateStyle: "full" })}, ${formatHHMM(st.target.slice(11), settings.value.h24)}`
+            : t("countdown.arrived")
         }
       >
         {pad(s / 86400)}
@@ -52,12 +51,12 @@ export function CountdownView() {
       </Display>
 
       <Button variant="outline" onClick={openPicker}>
-        <CalendarClock /> Cambiar fecha
+        <CalendarClock /> {t("countdown.change")}
       </Button>
       <TimeDialog
         open={picking}
         onOpenChange={setPicking}
-        title="Cambiar fecha"
+        title={t("countdown.change")}
         value={st.target}
         withDate
         onConfirm={(target) => setSt({ target, done: false })}

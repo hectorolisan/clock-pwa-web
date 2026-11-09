@@ -8,14 +8,11 @@ import { startAlert, unlockAudio, requestNotifications } from "@/lib/alert";
 import { formatDuration } from "@/lib/time";
 import { baseTitle } from "@/lib/title";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 type Mode = "focus" | "short" | "long";
 
-const MODES: Record<Mode, string> = {
-  focus: "Pomodoro",
-  short: "Pausa corta",
-  long: "Pausa larga",
-};
+const MODES = ["focus", "short", "long"] as const;
 
 const cfg = { focus: 25, short: 5, long: 15, longEvery: 4, autoStart: false };
 
@@ -46,14 +43,14 @@ export function PomodoroView() {
 
   useEffect(() => {
     if (st.endAt && left <= 0) {
-      startAlert(st.mode === "focus" ? "¡Pomodoro terminado! Toca descansar." : "Pausa terminada. ¡A trabajar!");
+      startAlert(st.mode === "focus" ? t("pomodoro.focusDone") : t("pomodoro.breakDone"));
       next(cfg.autoStart);
     }
   }, [left]);
 
   useEffect(() => {
     if (!st.endAt) return;
-    document.title = `${formatDuration(left)} · ${MODES[st.mode]}`;
+    document.title = `${formatDuration(left)} · ${t(`pomodoro.${st.mode}`)}`;
     return () => void (document.title = baseTitle.value);
   });
 
@@ -66,14 +63,14 @@ export function PomodoroView() {
   return (
     <Panel>
       <div class="flex flex-wrap justify-center gap-1">
-        {(Object.keys(MODES) as Mode[]).map((m) => (
+        {MODES.map((m) => (
           <Button key={m} size="sm" variant={m === st.mode ? "secondary" : "ghost"} onClick={() => go(m)}>
-            {MODES[m]}
+            {t(`pomodoro.${m}`)}
           </Button>
         ))}
       </div>
 
-      <Display sub={{ focus: "concéntrate", short: "descansa", long: "relájate" }[st.mode]}>
+      <Display sub={t(`pomodoro.${st.mode}Sub`)}>
         {formatDuration(left)}
       </Display>
 
@@ -85,14 +82,14 @@ export function PomodoroView() {
       </div>
 
       <div class="flex items-center gap-2">
-        <Button variant="ghost" size="icon-lg" aria-label="Reiniciar" onClick={() => go(st.mode)}>
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} onClick={() => go(st.mode)}>
           <RotateCcw />
         </Button>
         <Button size="lg" className={cn("h-12 w-40 text-base")} onClick={toggle}>
           {st.endAt ? <Pause /> : <Play />}
-          {st.endAt ? "Pausar" : "Empezar"}
+          {st.endAt ? t("action.pause") : t("action.start")}
         </Button>
-        <Button variant="ghost" size="icon-lg" aria-label="Saltar" onClick={() => next(false)}>
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.skip")} onClick={() => next(false)}>
           <SkipForward />
         </Button>
       </div>

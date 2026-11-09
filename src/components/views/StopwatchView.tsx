@@ -5,6 +5,7 @@ import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { formatDuration, pad } from "@/lib/time";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export function StopwatchView() {
   const [st, setSt] = useStored("stopwatch", {
@@ -35,7 +36,7 @@ export function StopwatchView() {
         <Button
           variant="ghost"
           size="icon-lg"
-          aria-label="Reiniciar"
+          aria-label={t("action.reset")}
           disabled={!total}
           onClick={() => setSt({ startAt: null, elapsed: 0, laps: [] })}
         >
@@ -43,9 +44,9 @@ export function StopwatchView() {
         </Button>
         <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
           {st.startAt ? <Pause /> : <Play />}
-          {st.startAt ? "Parar" : total ? "Reanudar" : "Empezar"}
+          {st.startAt ? t("action.stop") : total ? t("action.resume") : t("action.start")}
         </Button>
-        <Button variant="ghost" size="icon-lg" aria-label="Vuelta" disabled={!st.startAt} onClick={lap}>
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.lap")} disabled={!st.startAt} onClick={lap}>
           <Flag />
         </Button>
       </div>
@@ -55,9 +56,9 @@ export function StopwatchView() {
           <table class="w-full text-sm">
             <thead class="sticky top-0 bg-muted">
               <tr class="eyebrow border-b text-muted-foreground [&>th]:py-3 [&>th]:font-medium">
-                <th class="text-left">Vuelta</th>
-                <th class="text-right">Parcial</th>
-                <th class="text-right">Total</th>
+                <th class="text-left">{t("stopwatch.lap")}</th>
+                <th class="text-right">{t("stopwatch.split")}</th>
+                <th class="text-right">{t("stopwatch.total")}</th>
               </tr>
             </thead>
             <tbody class="font-mono text-xs">

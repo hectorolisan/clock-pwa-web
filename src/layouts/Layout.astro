@@ -38,6 +38,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
       const dark = t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.toggle("dark", dark);
       document.documentElement.dataset.color = localStorage.getItem("color") || "default";
+      document.documentElement.lang =
+        localStorage.getItem("lang") || (navigator.language.toLowerCase().startsWith("es") ? "es" : "en");
     </script>
   </head>
 

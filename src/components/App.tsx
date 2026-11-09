@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { alertMessage, stopAlert } from "@/lib/alert";
 import { baseTitle } from "@/lib/title";
+import { t } from "@/lib/i18n";
 import { ClockView } from "./views/ClockView";
 import { PomodoroView } from "./views/PomodoroView";
 import { CountdownView } from "./views/CountdownView";
@@ -12,21 +13,23 @@ import { StopwatchView } from "./views/StopwatchView";
 import { AlarmView } from "./views/AlarmView";
 
 const TABS = [
-  { id: "clock", label: "Reloj", icon: Clock, View: ClockView },
-  { id: "pomodoro", label: "Pomodoro", icon: Timer, View: PomodoroView },
-  { id: "countdown", label: "Cuenta atrás", icon: CalendarClock, View: CountdownView },
-  { id: "timer", label: "Temporizador", icon: Hourglass, View: TimerView },
-  { id: "stopwatch", label: "Cronómetro", icon: Watch, View: StopwatchView },
-  { id: "alarm", label: "Alarma", icon: AlarmClock, View: AlarmView },
-];
+  { id: "clock", icon: Clock, View: ClockView },
+  { id: "pomodoro", icon: Timer, View: PomodoroView },
+  { id: "countdown", icon: CalendarClock, View: CountdownView },
+  { id: "timer", icon: Hourglass, View: TimerView },
+  { id: "stopwatch", icon: Watch, View: StopwatchView },
+  { id: "alarm", icon: AlarmClock, View: AlarmView },
+] as const;
+
+const label = (id: (typeof TABS)[number]["id"]) => t(`tab.${id}`);
 
 const fromHash = () => {
   const h = location.hash.slice(1);
-  return TABS.some((t) => t.id === h) ? h : "clock";
+  return TABS.find((x) => x.id === h)?.id ?? "clock";
 };
 
 export default function App() {
-  const [tab, setTab] = useState(fromHash);
+  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>(fromHash);
 
   useEffect(() => {
     const onHash = () => setTab(fromHash());
@@ -35,12 +38,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    baseTitle.value = `${TABS.find((t) => t.id === tab)!.label} · clock-pwa-web`;
+    baseTitle.value = `${label(tab)} · clock-pwa-web`;
     document.title = baseTitle.value;
-  }, [tab]);
+  }, [tab, label(tab)]);
 
   const select = (id: string) => {
-    setTab(id);
+    setTab(id as typeof tab);
     history.replaceState(null, "", `#${id}`);
   };
 
@@ -56,7 +59,7 @@ export default function App() {
             <BellRing className="size-10 animate-bounce text-brand" />
             <p class="font-pixel text-2xl">{alertMessage.value}</p>
             <Button size="lg" className="h-12 w-full text-base" onClick={stopAlert} autoFocus>
-              Parar
+              {t("action.stop")}
             </Button>
           </div>
         </div>
@@ -67,9 +70,9 @@ export default function App() {
           variant="line"
           className="mx-auto max-w-full justify-start overflow-x-auto overflow-y-hidden pb-1.5 [scrollbar-width:none] group-data-horizontal/tabs:h-auto [&::-webkit-scrollbar]:hidden"
         >
-          {TABS.map(({ id, label, icon: Icon }) => (
-            <TabsTrigger key={id} value={id} className="px-3 font-mono text-xs" aria-label={label}>
-              <Icon /> <span class="hidden sm:inline">{label}</span>
+          {TABS.map(({ id, icon: Icon }) => (
+            <TabsTrigger key={id} value={id} className="px-3 font-mono text-xs" aria-label={label(id)}>
+              <Icon aria-hidden="true" /> <span class="hidden sm:inline">{label(id)}</span>
             </TabsTrigger>
           ))}
         </TabsList>

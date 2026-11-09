@@ -6,6 +6,7 @@ import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { startAlert, unlockAudio, requestNotifications } from "@/lib/alert";
 import { formatDuration } from "@/lib/time";
+import { t } from "@/lib/i18n";
 
 const PRESETS = [1, 5, 10, 15, 20, 30, 60];
 
@@ -23,7 +24,7 @@ export function TimerView() {
   useEffect(() => {
     if (st.endAt && left <= 0) {
       setSt({ ...st, endAt: null, left: st.duration });
-      startAlert("¡Tiempo!");
+      startAlert(t("timer.done", { name: formatDuration(st.duration) }));
     }
   }, [left]);
 
@@ -41,20 +42,20 @@ export function TimerView() {
 
   return (
     <Panel>
-      <Display sub={st.endAt ? "en marcha" : idle ? "listo" : "en pausa"}>
+      <Display sub={st.endAt ? t("timer.running") : idle ? t("timer.ready") : t("timer.paused")}>
         {formatDuration(left, { hours: st.duration >= 3_600_000 })}
       </Display>
 
       <div class="flex items-center gap-2">
-        <Button variant="ghost" size="icon-lg" aria-label="Reiniciar" onClick={() => set(st.duration)}>
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} onClick={() => set(st.duration)}>
           <RotateCcw />
         </Button>
         <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
           {st.endAt ? <Pause /> : <Play />}
-          {st.endAt ? "Pausar" : idle ? "Empezar" : "Reanudar"}
+          {st.endAt ? t("action.pause") : idle ? t("action.start") : t("action.resume")}
         </Button>
         <Button variant="ghost" size="lg" onClick={() => add(60_000)}>
-          <Plus /> 1 min
+          <Plus /> {t("timer.addMinute")}
         </Button>
       </div>
 
@@ -67,7 +68,7 @@ export function TimerView() {
             className="rounded-full font-mono"
             onClick={() => set(m * 60_000)}
           >
-            {m} min
+            {t("timer.preset", { n: m })}
           </Button>
         ))}
       </div>
