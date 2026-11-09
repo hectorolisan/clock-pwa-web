@@ -39,7 +39,7 @@ export function CountdownView() {
 
   return (
     <Panel>
-      <Display sub={left ? `Hasta el ${targetFmt.format(new Date(st.target))}` : "¡Llegó el momento!"}>
+      <Display sub={left ? targetFmt.format(new Date(st.target)) : "¡Llegó el momento!"}>
         {pad(s / 86400)}
         <span class="ml-[0.4em]">{pad((s / 3600) % 24)}</span>
         :
