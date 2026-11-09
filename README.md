@@ -11,6 +11,8 @@ Timers keep running across tab switches and reloads, and work offline once insta
 - **Vitest** + **Testing Library** — unit tests; **Oxlint** + **Prettier** — linting and formatting.
 - **pnpm** — package manager.
 
+> Live demo: [hectorolisan.github.io/clock-pwa-web](https://hectorolisan.github.io/clock-pwa-web/)
+
 > Alarms only ring while the app is open (tab or backgrounded PWA): the web cannot wake the device without a push server.
 
 ![cover](./public/cover.webp)

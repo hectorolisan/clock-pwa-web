@@ -71,7 +71,7 @@ export function startAlert(message: string) {
   loop = setInterval(beep, 2000);
   timeout = setTimeout(stopAlert, 60_000);
   if ("Notification" in window && Notification.permission === "granted") {
-    const opts = { body: message, tag: "clock", icon: "/pwa-192x192.png" };
+    const opts = { body: message, tag: "clock", icon: `${import.meta.env.BASE_URL}pwa-192x192.png` };
     navigator.serviceWorker?.ready
       .then((reg) => reg.showNotification(t("alert.title"), opts))
       .catch(() => new Notification(t("alert.title"), opts));

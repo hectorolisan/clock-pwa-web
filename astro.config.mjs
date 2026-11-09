@@ -4,10 +4,15 @@ import preact from "@astrojs/preact";
 import tailwindcss from "@tailwindcss/vite";
 import { AstroPWAIntegration } from "@vite-pwa/astro";
 
+// GitHub Pages: https://hectorolisan.github.io/clock-pwa-web/
+const base = "/clock-pwa-web/";
+
 /** @param {string} name @param {string} id */
-const shortcut = (name, id) => ({ name, short_name: name, url: `/#${id}` });
+const shortcut = (name, id) => ({ name, short_name: name, url: `${base}#${id}` });
 
 export default defineConfig({
+  site: "https://hectorolisan.github.io",
+  base,
   integrations: [
     preact({ compat: true }),
     AstroPWAIntegration({
@@ -26,7 +31,8 @@ export default defineConfig({
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
-        start_url: "/",
+        start_url: base,
+        scope: base,
         shortcuts: [
           shortcut("Pomodoro", "pomodoro"),
           shortcut("Temporizador", "timer"),
@@ -35,7 +41,7 @@ export default defineConfig({
         ],
       },
       generateSW: {
-        navigateFallback: "/",
+        navigateFallback: base,
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2,txt}"],
       },
     }),
