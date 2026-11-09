@@ -74,7 +74,7 @@ export function PomodoroView() {
           ))}
         </div>
 
-        <Display sub={st.mode === "focus" ? `#${st.round} · concéntrate` : `#${st.round} · descansa`}>
+        <Display sub={{ focus: "concéntrate", short: "descansa", long: "relájate" }[st.mode]}>
           {formatDuration(left)}
         </Display>
 
