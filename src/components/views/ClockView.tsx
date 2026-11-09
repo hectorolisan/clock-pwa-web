@@ -10,7 +10,6 @@ import { settings } from "@/lib/settings";
 import { pad, zoneCity, zoneOffset } from "@/lib/time";
 import { locale, t } from "@/lib/i18n";
 
-const MAX_ZONES = 8;
 const ZONES = Intl.supportedValuesOf("timeZone");
 
 function ZoneDialog({
@@ -72,7 +71,8 @@ export function ClockView() {
   const opts = settings.value;
   const now = useNow(500);
   const d = new Date(now);
-  const [zones, setZones] = useStored<string[]>("zones", []);
+  const [stored, setZones] = useStored<string[]>("zones", []);
+  const zones = stored.slice(0, 1);
   const [adding, setAdding] = useState(false);
 
   const h = opts.h24 ? d.getHours() : d.getHours() % 12 || 12;
@@ -96,20 +96,16 @@ export function ClockView() {
         {ampm && <span class="ml-2 text-[0.25em] text-muted-foreground">{ampm}</span>}
       </Display>
 
-      <section aria-labelledby="world-title" class="mt-4 flex w-full max-w-xl flex-col gap-2">
+      <section aria-labelledby="world-title" class="mt-4 flex w-full max-w-xs flex-col gap-2">
         <div class="flex items-center justify-between">
           <h2 id="world-title" class="eyebrow text-muted-foreground">
             {t("clock.world")}
           </h2>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            aria-label={t("clock.addZone")}
-            disabled={zones.length >= MAX_ZONES}
-            onClick={() => setAdding(true)}
-          >
-            <Plus />
-          </Button>
+          {zones.length === 0 && (
+            <Button variant="ghost" size="icon-sm" aria-label={t("clock.addZone")} onClick={() => setAdding(true)}>
+              <Plus />
+            </Button>
+          )}
         </div>
         {zones.length > 0 && (
           <ul class="flex flex-col divide-y border-y">
@@ -143,7 +139,7 @@ export function ClockView() {
         )}
       </section>
 
-      <ZoneDialog open={adding} onOpenChange={setAdding} exclude={zones} onPick={(z) => setZones([...zones, z])} />
+      <ZoneDialog open={adding} onOpenChange={setAdding} exclude={zones} onPick={(z) => setZones([z])} />
     </Panel>
   );
 }

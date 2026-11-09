@@ -19,7 +19,7 @@ Timers keep running across tab switches and reloads, and work offline once insta
 
 | Tab          | Hash         | Description                                                                                 |
 | :----------- | :----------- | :------------------------------------------------------------------------------------------ |
-| Reloj        | `#clock`     | Digital clock with 12/24 h and seconds settings, plus a world clock with up to 8 time zones |
+| Reloj        | `#clock`     | Digital clock with 12/24 h and seconds settings, plus a world clock for one extra time zone |
 | Pomodoro     | `#pomodoro`  | Work/break cycles with configurable durations, auto-start and daily cycle counter           |
 | Cuenta atrás | `#countdown` | Countdown to a target date and time                                                         |
 | Temporizador | `#timer`     | Up to 6 timers running at the same time, with presets and +1 min                            |
