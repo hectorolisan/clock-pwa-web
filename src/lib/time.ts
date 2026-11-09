@@ -17,3 +17,15 @@ export function formatHHMM(hhmm: string, h24: boolean) {
   const [h, m] = hhmm.split(":").map(Number);
   return `${pad(h % 12 || 12)}:${pad(m)} ${h < 12 ? "AM" : "PM"}`;
 }
+
+/** Desfase de una zona horaria respecto a UTC en minutos ("GMT+05:30" -> 330) */
+export function zoneOffset(timeZone: string, date = new Date()) {
+  const name = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "longOffset" })
+    .formatToParts(date)
+    .find((p) => p.type === "timeZoneName")!.value;
+  const m = name.match(/([+-])(\d{2}):(\d{2})/);
+  return m ? (m[1] === "-" ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3])) : 0;
+}
+
+/** "America/Argentina/Buenos_Aires" -> "Buenos Aires" */
+export const zoneCity = (timeZone: string) => timeZone.split("/").pop()!.replace(/_/g, " ");

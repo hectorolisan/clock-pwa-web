@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDuration, formatHHMM, pad } from "./time";
+import { formatDuration, formatHHMM, pad, zoneCity, zoneOffset } from "./time";
 
 describe("pad", () => {
   it("rellena con ceros y trunca decimales", () => {
@@ -39,5 +39,21 @@ describe("formatHHMM", () => {
     expect(formatHHMM("19:30", false)).toBe("07:30 PM");
     expect(formatHHMM("00:05", false)).toBe("12:05 AM");
     expect(formatHHMM("12:00", false)).toBe("12:00 PM");
+  });
+});
+
+describe("zoneOffset", () => {
+  it("devuelve minutos respecto a UTC", () => {
+    const winter = new Date(Date.UTC(2026, 0, 15));
+    expect(zoneOffset("UTC", winter)).toBe(0);
+    expect(zoneOffset("Asia/Kolkata", winter)).toBe(330);
+    expect(zoneOffset("America/New_York", winter)).toBe(-300);
+    expect(zoneOffset("Atlantic/Canary", winter)).toBe(0);
+  });
+});
+
+describe("zoneCity", () => {
+  it("toma el último segmento sin guiones bajos", () => {
+    expect(zoneCity("America/Argentina/Buenos_Aires")).toBe("Buenos Aires");
   });
 });
