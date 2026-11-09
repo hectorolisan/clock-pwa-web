@@ -1,9 +1,6 @@
 import { useEffect } from "preact/hooks";
 import { Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Display, Panel } from "@/components/Display";
 import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
@@ -19,15 +16,14 @@ const MODES: Record<Mode, string> = {
   long: "Pausa larga",
 };
 
-const DEFAULTS = { focus: 25, short: 5, long: 15, longEvery: 4, autoStart: false };
+const cfg = { focus: 25, short: 5, long: 15, longEvery: 4, autoStart: false };
 
 export function PomodoroView() {
-  const [cfg, setCfg] = useStored("pomodoro-config", DEFAULTS);
   const [st, setSt] = useStored("pomodoro", {
     mode: "focus" as Mode,
     round: 1,
     endAt: null as number | null,
-    left: DEFAULTS.focus * 60_000,
+    left: cfg.focus * 60_000,
   });
 
   const now = useNow(250, st.endAt !== null);
@@ -67,12 +63,6 @@ export function PomodoroView() {
     setSt(st.endAt ? { ...st, endAt: null, left } : { ...st, endAt: Date.now() + st.left });
   };
 
-  const setMin = (key: Mode, v: string) => {
-    const n = Math.min(180, Math.max(1, Number(v) || 1));
-    setCfg({ ...cfg, [key]: n });
-    if (key === st.mode && !st.endAt) setSt({ ...st, left: n * 60_000 });
-  };
-
   return (
     <div class="flex flex-col gap-6">
       <Panel>
@@ -108,29 +98,6 @@ export function PomodoroView() {
           </Button>
         </div>
       </Panel>
-
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {(Object.keys(MODES) as Mode[]).map((m) => (
-          <Label key={m} className="flex-col items-start gap-2">
-            <span class="eyebrow text-muted-foreground">{MODES[m]} (min)</span>
-            <Input type="number" min={1} max={180} value={cfg[m]} onChange={(e) => setMin(m, e.currentTarget.value)} />
-          </Label>
-        ))}
-        <Label className="flex-col items-start gap-2">
-          <span class="eyebrow text-muted-foreground">Pausa larga cada</span>
-          <Input
-            type="number"
-            min={2}
-            max={12}
-            value={cfg.longEvery}
-            onChange={(e) => setCfg({ ...cfg, longEvery: Math.max(2, Number(e.currentTarget.value) || 4) })}
-          />
-        </Label>
-      </div>
-      <Label className="gap-2 self-center">
-        <Switch checked={cfg.autoStart} onCheckedChange={(autoStart) => setCfg({ ...cfg, autoStart })} />
-        Encadenar automáticamente
-      </Label>
     </div>
   );
 }
