@@ -8,22 +8,12 @@ import { useStored } from "@/hooks/useStored";
 import { requestNotifications, startAlert, unlockAudio } from "@/lib/alert";
 import { settings } from "@/lib/settings";
 import { formatHHMM, pad } from "@/lib/time";
+import { untilNext } from "@/lib/timer";
 import { cn } from "@/lib/utils";
 
 type Alarm = { id: number; time: string; on: boolean };
 
 const MAX = 3;
-const DAY = 86_400_000;
-
-/** ms hasta la próxima vez que el reloj marque `time` (HH:MM) */
-function untilNext(time: string, now: number) {
-  const [h, m] = time.split(":").map(Number);
-  const t = new Date(now);
-  t.setHours(h, m, 0, 0);
-  const diff = t.getTime() - now;
-  return diff > 0 ? diff : diff + DAY;
-}
-
 const fmtLeft = (ms: number) => {
   const min = Math.ceil(ms / 60_000);
   return `en ${Math.floor(min / 60)} h ${min % 60} min`;
