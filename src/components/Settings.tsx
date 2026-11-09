@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { settings } from "@/lib/settings";
+import { COLORS, color } from "@/lib/theme";
 
 const OPTIONS = [
   { key: "h24", label: "Formato 24 h", hint: "Si se desactiva, usa AM/PM." },
@@ -36,6 +37,29 @@ export default function Settings() {
               />
             </Label>
           ))}
+          <fieldset class="flex flex-col gap-3 py-3">
+            <legend class="mb-3 text-sm font-medium">Color principal</legend>
+            <div class="flex flex-wrap gap-2">
+              {COLORS.map((c) => (
+                <label
+                  key={c}
+                  data-color={c}
+                  title={c}
+                  class="relative size-7 cursor-pointer rounded-full bg-primary ring-offset-2 ring-offset-background has-checked:ring-2 has-checked:ring-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
+                >
+                  <input
+                    type="radio"
+                    name="color"
+                    value={c}
+                    aria-label={c}
+                    checked={color.value === c}
+                    onChange={() => (color.value = c)}
+                    class="sr-only"
+                  />
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
       </DialogContent>
     </Dialog>

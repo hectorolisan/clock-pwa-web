@@ -37,6 +37,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
       const t = localStorage.getItem("theme");
       const dark = t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.toggle("dark", dark);
+      document.documentElement.dataset.color = localStorage.getItem("color") || "default";
     </script>
   </head>
 
