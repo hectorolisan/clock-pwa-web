@@ -1,6 +1,6 @@
 import { useEffect } from "preact/hooks";
 import { Input } from "@/components/ui/input";
-import { Panel } from "@/components/Display";
+import { Display, Panel } from "@/components/Display";
 import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { requestNotifications, startAlert, unlockAudio } from "@/lib/alert";
@@ -24,48 +24,38 @@ export function CountdownView() {
   }, [left]);
 
   const s = Math.floor(left / 1000);
-  const parts = [
-    { v: Math.floor(s / 86400), l: "días" },
-    { v: Math.floor(s / 3600) % 24, l: "horas" },
-    { v: Math.floor(s / 60) % 60, l: "min" },
-    { v: s % 60, l: "seg" },
-  ];
 
   return (
     <div class="flex flex-col gap-6">
-      <Panel>
-        <p class="eyebrow text-muted-foreground">{st.label || "Cuenta atrás"}</p>
-        <div class="grid grid-cols-4 gap-3 sm:gap-6">
-          {parts.map((p) => (
-            <div key={p.l} class="flex flex-col items-center gap-3">
-              <span class="font-pixel text-[clamp(2.5rem,12vw,7rem)] leading-none tabular-nums">
-                {pad(p.v, p.v > 99 ? 3 : 2)}
-              </span>
-              <span class="eyebrow text-muted-foreground">{p.l}</span>
-            </div>
-          ))}
-        </div>
-        {!left && <p class="font-mono text-sm text-brand">¡Llegó el momento!</p>}
+      <Panel class="min-h-80 justify-center">
+        <input
+          value={st.label}
+          maxLength={40}
+          placeholder="Cuenta atrás"
+          aria-label="Nombre del evento"
+          onInput={(e) => setSt({ ...st, label: e.currentTarget.value })}
+          class="eyebrow w-full max-w-md rounded-md bg-transparent py-1 text-center text-muted-foreground outline-none placeholder:text-muted-foreground/60 hover:text-foreground focus-visible:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+        />
+        <Display sub={!left && "¡Llegó el momento!"}>
+          {pad(s / 86400)}
+          <span class="animate-pulse">:</span>
+          {pad((s / 3600) % 24)}:{pad((s / 60) % 60)}
+          <span class="text-[0.45em] text-muted-foreground">{pad(s % 60)}</span>
+        </Display>
       </Panel>
 
-      <div class="mx-auto grid w-full max-w-md gap-4 sm:grid-cols-2">
-        <label class="flex flex-col gap-2">
-          <span class="eyebrow text-muted-foreground">Evento</span>
-          <Input value={st.label} maxLength={40} onInput={(e) => setSt({ ...st, label: e.currentTarget.value })} />
-        </label>
-        <label class="flex flex-col gap-2">
-          <span class="eyebrow text-muted-foreground">Fecha y hora</span>
-          <Input
-            type="datetime-local"
-            value={st.target}
-            onChange={(e) => {
-              unlockAudio();
-              requestNotifications();
-              setSt({ ...st, target: e.currentTarget.value, done: false });
-            }}
-          />
-        </label>
-      </div>
+      <label class="mx-auto flex w-full max-w-xs flex-col gap-2">
+        <span class="eyebrow text-muted-foreground">Fecha y hora</span>
+        <Input
+          type="datetime-local"
+          value={st.target}
+          onChange={(e) => {
+            unlockAudio();
+            requestNotifications();
+            setSt({ ...st, target: e.currentTarget.value, done: false });
+          }}
+        />
+      </label>
     </div>
   );
 }
