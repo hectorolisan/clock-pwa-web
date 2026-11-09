@@ -54,7 +54,10 @@ export default function App() {
       )}
 
       <Tabs value={tab} onValueChange={select} className="gap-8">
-        <TabsList variant="line" className="mx-auto max-w-full justify-start overflow-x-auto">
+        <TabsList
+          variant="line"
+          className="mx-auto max-w-full justify-start overflow-x-auto overflow-y-hidden pb-1.5 [scrollbar-width:none] group-data-horizontal/tabs:h-auto [&::-webkit-scrollbar]:hidden"
+        >
           {TABS.map(({ id, label, icon: Icon }) => (
             <TabsTrigger key={id} value={id} className="px-3 font-mono text-xs" aria-label={label}>
               <Icon /> <span class="hidden sm:inline">{label}</span>
