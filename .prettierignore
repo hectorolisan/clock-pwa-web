@@ -2,3 +2,4 @@ dist
 .astro
 pnpm-lock.yaml
 src/components/ui
+pnpm-workspace.yaml
