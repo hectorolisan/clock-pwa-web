@@ -1,8 +1,8 @@
 import { useEffect, useState } from "preact/hooks";
 import { BellPlus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { TimeDialog } from "@/components/TimeDialog";
 import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { requestNotifications, startAlert, unlockAudio } from "@/lib/alert";
@@ -31,7 +31,7 @@ const fmtLeft = (ms: number) => {
 
 export function AlarmView() {
   const [alarms, setAlarms] = useStored<Alarm[]>("alarms", []);
-  const [time, setTime] = useState("07:00");
+  const [editing, setEditing] = useState<number | "new" | null>(null);
   const [fired, setFired] = useState("");
   const now = useNow(1000);
   const full = alarms.length >= MAX;
@@ -48,35 +48,25 @@ export function AlarmView() {
     setAlarms(alarms.map((a) => (ringing.includes(a) ? { ...a, on: false } : a)));
   }, [now]);
 
-  const add = (e: Event) => {
-    e.preventDefault();
-    if (full) return;
+  const save = (time: string) => {
+    const next =
+      editing === "new"
+        ? [...alarms, { id: Date.now(), time, on: true }]
+        : alarms.map((a) => (a.id === editing ? { ...a, time, on: true } : a));
+    setAlarms(next.sort((a, b) => a.time.localeCompare(b.time)));
+  };
+
+  const add = () => {
     unlockAudio();
     requestNotifications();
-    const next = [...alarms, { id: Date.now(), time, on: true }];
-    setAlarms(next.sort((a, b) => a.time.localeCompare(b.time)));
+    setEditing("new");
   };
 
   return (
     <div class="flex flex-col gap-6">
-      <form
-        onSubmit={add}
-        class="mx-auto flex w-full max-w-xl flex-wrap items-end gap-3 rounded-xl border bg-muted/50 p-4"
-      >
-        <label class="flex flex-1 flex-col gap-2">
-          <span class="eyebrow text-muted-foreground">Hora</span>
-          <Input
-            type="time"
-            required
-            value={time}
-            onChange={(e) => setTime(e.currentTarget.value)}
-            className="font-mono"
-          />
-        </label>
-        <Button type="submit" disabled={full}>
-          <BellPlus /> Añadir
-        </Button>
-      </form>
+      <Button className="mx-auto" disabled={full} onClick={add}>
+        <BellPlus /> Añadir alarma
+      </Button>
 
       {alarms.length === 0 ? (
         <p class="text-center font-mono text-xs text-muted-foreground">Sin alarmas todavía.</p>
@@ -85,26 +75,17 @@ export function AlarmView() {
           {alarms.map((a) => (
             <li key={a.id} class="flex items-center gap-4 py-4">
               <div class="flex-1">
-                <label class="relative inline-block cursor-pointer rounded-md transition-opacity hover:opacity-80 has-focus-visible:ring-3 has-focus-visible:ring-ring/50">
-                  <span class={cn("font-pixel text-4xl text-primary tabular-nums dark:text-foreground", !a.on && "text-muted-foreground dark:text-muted-foreground")}>
-                    {formatHHMM(a.time, settings.value.h24)}
-                  </span>
-                  {/* Input invisible encima: abre el selector nativo de hora */}
-                  <input
-                    type="time"
-                    required
-                    aria-label="Cambiar hora"
-                    value={a.time}
-                    onClick={(e) => e.currentTarget.showPicker?.()}
-                    onChange={(e) => {
-                      const t = e.currentTarget.value;
-                      if (!t) return;
-                      const next = alarms.map((x) => (x.id === a.id ? { ...x, time: t, on: true } : x));
-                      setAlarms(next.sort((x, y) => x.time.localeCompare(y.time)));
-                    }}
-                    class="absolute inset-0 cursor-pointer opacity-0"
-                  />
-                </label>
+                <button
+                  type="button"
+                  aria-label="Cambiar hora"
+                  onClick={() => setEditing(a.id)}
+                  class={cn(
+                    "rounded-md font-pixel text-4xl text-primary tabular-nums transition-opacity outline-none hover:opacity-80 focus-visible:ring-3 focus-visible:ring-ring/50 dark:text-foreground",
+                    !a.on && "text-muted-foreground dark:text-muted-foreground",
+                  )}
+                >
+                  {formatHHMM(a.time, settings.value.h24)}
+                </button>
                 <p class="mt-1 font-mono text-xs text-muted-foreground">
                   {a.on ? fmtLeft(untilNext(a.time, now)) : "Desactivada"}
                 </p>
@@ -130,6 +111,14 @@ export function AlarmView() {
       <p class="eyebrow text-center text-muted-foreground">
         {alarms.length}/{MAX} alarmas
       </p>
+
+      <TimeDialog
+        open={editing !== null}
+        onOpenChange={(o) => !o && setEditing(null)}
+        title={editing === "new" ? "Nueva alarma" : "Cambiar hora"}
+        value={alarms.find((a) => a.id === editing)?.time ?? "07:00"}
+        onConfirm={save}
+      />
     </div>
   );
 }
