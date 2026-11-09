@@ -40,7 +40,7 @@ export function CountdownView() {
       <Display sub={!left && "¡Llegó el momento!"}>
         {pad(s / 86400)}
         <span class="ml-[0.4em]">{pad((s / 3600) % 24)}</span>
-        <span class="animate-pulse">:</span>
+        :
         {pad((s / 60) % 60)}
         {settings.value.seconds && <span class="text-[0.45em] text-muted-foreground">{pad(s % 60)}</span>}
       </Display>

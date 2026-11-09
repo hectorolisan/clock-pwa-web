@@ -21,7 +21,7 @@ export function ClockView() {
     <Panel>
       <Display sub={dateFmt.format(d)}>
         {pad(h)}
-        <span class="animate-pulse">:</span>
+        :
         {pad(d.getMinutes())}
         {opts.seconds && <span class="text-[0.45em] text-muted-foreground">{pad(d.getSeconds())}</span>}
         {ampm && <span class="ml-2 text-[0.25em] text-muted-foreground">{ampm}</span>}

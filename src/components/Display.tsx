@@ -1,5 +1,13 @@
-import type { ComponentChildren } from "preact";
+import { toChildArray, type ComponentChildren } from "preact";
 import { cn } from "@/lib/utils";
+
+/** Pinta los ":" de los textos en gris, como los segundos */
+const dimColons = (children: ComponentChildren) =>
+  toChildArray(children).map((c) =>
+    typeof c === "string"
+      ? c.split(/(:)/).map((part) => (part === ":" ? <span class="text-muted-foreground">:</span> : part))
+      : c,
+  );
 
 export function Display({
   children,
@@ -19,7 +27,7 @@ export function Display({
           className,
         )}
       >
-        {children}
+        {dimColons(children)}
       </p>
       {sub && <p class="eyebrow text-muted-foreground">{sub}</p>}
     </div>
