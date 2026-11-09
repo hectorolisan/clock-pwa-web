@@ -87,18 +87,16 @@ export function ClockView() {
   };
 
   return (
-    <div class="flex min-h-0 flex-1 flex-col gap-6">
-      <Panel>
-        <Display
-          sub={d.toLocaleDateString(locale.value, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-        >
-          {pad(h)}:{pad(d.getMinutes())}
-          {opts.seconds && <span class="text-[0.45em] text-muted-foreground">{pad(d.getSeconds())}</span>}
-          {ampm && <span class="ml-2 text-[0.25em] text-muted-foreground">{ampm}</span>}
-        </Display>
-      </Panel>
+    <Panel>
+      <Display
+        sub={d.toLocaleDateString(locale.value, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+      >
+        {pad(h)}:{pad(d.getMinutes())}
+        {opts.seconds && <span class="text-[0.45em] text-muted-foreground">{pad(d.getSeconds())}</span>}
+        {ampm && <span class="ml-2 text-[0.25em] text-muted-foreground">{ampm}</span>}
+      </Display>
 
-      <section aria-labelledby="world-title" class="mx-auto flex w-full max-w-xl flex-col gap-2">
+      <section aria-labelledby="world-title" class="mt-4 flex w-full max-w-xl flex-col gap-2">
         <div class="flex items-center justify-between">
           <h2 id="world-title" class="eyebrow text-muted-foreground">
             {t("clock.world")}
@@ -146,6 +144,6 @@ export function ClockView() {
       </section>
 
       <ZoneDialog open={adding} onOpenChange={setAdding} exclude={zones} onPick={(z) => setZones([...zones, z])} />
-    </div>
+    </Panel>
   );
 }
