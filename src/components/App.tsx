@@ -35,7 +35,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    baseTitle.value = `${TABS.find((t) => t.id === tab)!.label} · Clock`;
+    baseTitle.value = `${TABS.find((t) => t.id === tab)!.label} · clock-pwa-web`;
     document.title = baseTitle.value;
   }, [tab]);
 
