@@ -75,10 +75,11 @@ export default function App() {
         <div class="fixed inset-0 z-50 grid animate-in place-items-center bg-black/50 p-4 backdrop-blur-sm duration-300 fade-in">
           <div
             role="alertdialog"
+            aria-modal="true"
             aria-label={alertMessage.value}
             class="flex w-full max-w-sm flex-col items-center gap-6 rounded-xl border bg-background p-8 text-center shadow-lg"
           >
-            <BellRing className="size-10 animate-bounce text-brand" />
+            <BellRing className="size-10 text-brand motion-safe:animate-bounce" aria-hidden="true" />
             <p class="font-pixel text-2xl">{alertMessage.value}</p>
             <Button size="lg" className="h-12 w-full text-base" onClick={stopAlert} autoFocus>
               {t("action.stop")}

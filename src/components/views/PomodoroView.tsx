@@ -12,6 +12,7 @@ import { startAlert, unlockAudio, requestNotifications } from "@/lib/alert";
 import { formatDuration } from "@/lib/time";
 import { useShortcuts } from "@/hooks/useShortcuts";
 import { useStatus } from "@/lib/status";
+import { announce } from "@/lib/announce";
 import {
   MINUTE,
   createCountdown,
@@ -132,6 +133,7 @@ export function PomodoroView({ active }: { active: boolean }) {
     unlockAudio();
     requestNotifications();
     setSt({ ...st, ...toggleCountdown(st, Date.now()) });
+    announce(st.endAt ? t("time.paused") : t("time.started"));
   };
 
   useShortcuts(active, { toggle, reset: () => go(st.mode), skip: () => next(false) });
@@ -177,14 +179,26 @@ export function PomodoroView({ active }: { active: boolean }) {
       </div>
 
       <div class="flex items-center gap-2">
-        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} onClick={() => go(st.mode)}>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          aria-label={t("action.reset")}
+          aria-keyshortcuts="R"
+          onClick={() => go(st.mode)}
+        >
           <RotateCcw />
         </Button>
-        <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
+        <Button size="lg" className="h-12 w-40 text-base" aria-keyshortcuts="Space K" onClick={toggle}>
           {st.endAt ? <Pause /> : <Play />}
           {st.endAt ? t("action.pause") : t("action.start")}
         </Button>
-        <Button variant="ghost" size="icon-lg" aria-label={t("action.skip")} onClick={() => next(false)}>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          aria-label={t("action.skip")}
+          aria-keyshortcuts="N"
+          onClick={() => next(false)}
+        >
           <SkipForward />
         </Button>
       </div>

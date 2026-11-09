@@ -31,7 +31,10 @@ export function StopwatchView({ active }: { active: boolean }) {
   const now = useNow(31, st.startAt !== null);
   const total = st.elapsed + (st.startAt ? now - st.startAt : 0);
 
-  const toggle = () => setSt(st.startAt ? { ...st, startAt: null, elapsed: total } : { ...st, startAt: Date.now() });
+  const toggle = () => {
+    setSt(st.startAt ? { ...st, startAt: null, elapsed: total } : { ...st, startAt: Date.now() });
+    announce(st.startAt ? t("time.paused") : t("time.started"));
+  };
 
   const lap = () => {
     if (!st.startAt) return;
@@ -56,14 +59,28 @@ export function StopwatchView({ active }: { active: boolean }) {
       </Display>
 
       <div class="flex items-center gap-2">
-        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} disabled={!total} onClick={resetAll}>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          aria-label={t("action.reset")}
+          aria-keyshortcuts="R"
+          disabled={!total}
+          onClick={resetAll}
+        >
           <RotateCcw />
         </Button>
-        <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
+        <Button size="lg" className="h-12 w-40 text-base" aria-keyshortcuts="Space K" onClick={toggle}>
           {st.startAt ? <Pause /> : <Play />}
           {st.startAt ? t("action.stop") : total ? t("action.resume") : t("action.start")}
         </Button>
-        <Button variant="ghost" size="icon-lg" aria-label={t("action.lap")} disabled={!st.startAt} onClick={lap}>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          aria-label={t("action.lap")}
+          aria-keyshortcuts="L"
+          disabled={!st.startAt}
+          onClick={lap}
+        >
           <Flag />
         </Button>
       </div>

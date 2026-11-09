@@ -20,6 +20,7 @@ import { t } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useShortcuts } from "@/hooks/useShortcuts";
 import { useStatus } from "@/lib/status";
+import { announce } from "@/lib/announce";
 
 const PRESETS = [1, 5, 10, 15, 20, 30, 60];
 const MAX = 6;
@@ -55,6 +56,7 @@ export function TimerView({ active }: { active: boolean }) {
     unlockAudio();
     requestNotifications();
     update(sel.id, (x) => ({ ...x, ...toggleCountdown(x, Date.now()) }));
+    announce(sel.endAt ? t("time.paused") : t("time.started"));
   };
 
   const resetSel = () => update(sel.id, (x) => reset(x) as Timer);
@@ -116,10 +118,10 @@ export function TimerView({ active }: { active: boolean }) {
       </Display>
 
       <div class="flex items-center gap-2">
-        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} onClick={resetSel}>
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} aria-keyshortcuts="R" onClick={resetSel}>
           <RotateCcw />
         </Button>
-        <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>
+        <Button size="lg" className="h-12 w-40 text-base" aria-keyshortcuts="Space K" onClick={toggle}>
           {sel.endAt ? <Pause /> : <Play />}
           {sel.endAt ? t("action.pause") : idle ? t("action.start") : t("action.resume")}
         </Button>

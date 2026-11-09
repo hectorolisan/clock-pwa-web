@@ -29,6 +29,7 @@ export function Display({
   return (
     <div class="flex flex-col items-center gap-3">
       <p
+        role="timer"
         class={cn(
           "font-pixel leading-none tracking-tight text-primary tabular-nums select-none dark:text-foreground",
           "text-[clamp(3rem,min(16vw,20vh),10rem)]",
