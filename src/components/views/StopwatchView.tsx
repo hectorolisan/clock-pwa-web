@@ -1,11 +1,23 @@
-import { Flag, Pause, Play, RotateCcw } from "lucide-react";
+import { Copy, Download, Flag, Pause, Play, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Display, Panel } from "@/components/Display";
 import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { formatDuration, pad } from "@/lib/time";
 import { cn } from "@/lib/utils";
+import { lapsToCsv, splits as getSplits } from "@/lib/timer";
 import { t } from "@/lib/i18n";
+import { announce } from "@/lib/announce";
+
+const fmt = (ms: number) => formatDuration(ms, { hours: true, centis: true });
+
+function download(laps: number[]) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lapsToCsv(laps, fmt)], { type: "text/csv" }));
+  a.download = `laps-${new Date().toISOString().slice(0, 19).replace(/:/g, "")}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 
 export function StopwatchView() {
   const [st, setSt] = useStored("stopwatch", {
@@ -21,7 +33,7 @@ export function StopwatchView() {
 
   const lap = () => setSt({ ...st, laps: [...st.laps, total] });
 
-  const splits = st.laps.map((t, i) => t - (st.laps[i - 1] ?? 0));
+  const splits = getSplits(st.laps);
   const best = splits.length > 1 && new Set(splits).size > 1 ? Math.min(...splits) : -1;
   const worst = best === -1 ? -1 : Math.max(...splits);
 
@@ -50,6 +62,23 @@ export function StopwatchView() {
           <Flag />
         </Button>
       </div>
+
+      {st.laps.length > 0 && (
+        <div class="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => download(st.laps)}>
+            <Download /> {t("stopwatch.export")}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              void navigator.clipboard.writeText(lapsToCsv(st.laps, fmt)).then(() => announce(t("stopwatch.copied")))
+            }
+          >
+            <Copy /> {t("stopwatch.copy")}
+          </Button>
+        </div>
+      )}
 
       {st.laps.length > 0 && (
         <div class="min-h-0 w-full max-w-md overflow-y-auto">

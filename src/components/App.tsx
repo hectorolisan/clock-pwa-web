@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { alertMessage, stopAlert } from "@/lib/alert";
 import { baseTitle } from "@/lib/title";
 import { t } from "@/lib/i18n";
+import { announcement } from "@/lib/announce";
 import { ClockView } from "./views/ClockView";
 import { PomodoroView } from "./views/PomodoroView";
 import { CountdownView } from "./views/CountdownView";
@@ -49,8 +50,12 @@ export default function App() {
 
   return (
     <>
+      <p role="status" aria-live="polite" class="sr-only">
+        {announcement.value}
+      </p>
+
       {alertMessage.value && (
-        <div class="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 backdrop-blur-sm duration-300 animate-in fade-in">
+        <div class="fixed inset-0 z-50 grid animate-in place-items-center bg-black/50 p-4 backdrop-blur-sm duration-300 fade-in">
           <div
             role="alertdialog"
             aria-label={alertMessage.value}
@@ -68,7 +73,7 @@ export default function App() {
       <Tabs value={tab} onValueChange={select} className="min-h-0 flex-1 gap-8">
         <TabsList
           variant="line"
-          className="mx-auto max-w-full justify-start overflow-x-auto overflow-y-hidden pb-1.5 [scrollbar-width:none] group-data-horizontal/tabs:h-auto [&::-webkit-scrollbar]:hidden"
+          className="mx-auto max-w-full [scrollbar-width:none] justify-start overflow-x-auto overflow-y-hidden pb-1.5 group-data-horizontal/tabs:h-auto [&::-webkit-scrollbar]:hidden"
         >
           {TABS.map(({ id, icon: Icon }) => (
             <TabsTrigger key={id} value={id} className="px-3 font-mono text-xs" aria-label={label(id)}>
@@ -78,7 +83,12 @@ export default function App() {
         </TabsList>
 
         {TABS.map(({ id, View }) => (
-          <TabsContent key={id} value={id} forceMount className="flex min-h-0 flex-col duration-300 data-[state=active]:animate-in data-[state=active]:fade-in data-[state=inactive]:hidden motion-reduce:animate-none">
+          <TabsContent
+            key={id}
+            value={id}
+            forceMount
+            className="flex min-h-0 flex-col duration-300 data-[state=active]:animate-in data-[state=active]:fade-in data-[state=inactive]:hidden motion-reduce:animate-none"
+          >
             <View />
           </TabsContent>
         ))}
