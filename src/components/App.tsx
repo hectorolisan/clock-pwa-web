@@ -3,6 +3,7 @@ import { AlarmClock, BellRing, CalendarClock, Clock, Hourglass, Timer, Watch } f
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { alertMessage, stopAlert } from "@/lib/alert";
+import { baseTitle } from "@/lib/title";
 import { ClockView } from "./views/ClockView";
 import { PomodoroView } from "./views/PomodoroView";
 import { CountdownView } from "./views/CountdownView";
@@ -32,6 +33,11 @@ export default function App() {
     addEventListener("hashchange", onHash);
     return () => removeEventListener("hashchange", onHash);
   }, []);
+
+  useEffect(() => {
+    baseTitle.value = `${TABS.find((t) => t.id === tab)!.label} · Clock`;
+    document.title = baseTitle.value;
+  }, [tab]);
 
   const select = (id: string) => {
     setTab(id);

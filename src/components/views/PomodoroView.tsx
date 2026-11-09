@@ -6,6 +6,7 @@ import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { startAlert, unlockAudio, requestNotifications } from "@/lib/alert";
 import { formatDuration } from "@/lib/time";
+import { baseTitle } from "@/lib/title";
 import { cn } from "@/lib/utils";
 
 type Mode = "focus" | "short" | "long";
@@ -52,9 +53,8 @@ export function PomodoroView() {
 
   useEffect(() => {
     if (!st.endAt) return;
-    const prev = document.title;
     document.title = `${formatDuration(left)} · ${MODES[st.mode]}`;
-    return () => void (document.title = prev);
+    return () => void (document.title = baseTitle.value);
   });
 
   const toggle = () => {
