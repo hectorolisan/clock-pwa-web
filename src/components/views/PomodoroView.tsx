@@ -10,7 +10,8 @@ import { useNow } from "@/hooks/useNow";
 import { useStored } from "@/hooks/useStored";
 import { startAlert, unlockAudio, requestNotifications } from "@/lib/alert";
 import { formatDuration } from "@/lib/time";
-import { baseTitle } from "@/lib/title";
+import { useShortcuts } from "@/hooks/useShortcuts";
+import { useStatus } from "@/lib/status";
 import {
   MINUTE,
   createCountdown,
@@ -88,7 +89,7 @@ function ConfigDialog({
   );
 }
 
-export function PomodoroView() {
+export function PomodoroView({ active }: { active: boolean }) {
   const [cfg, setCfg] = useStored("pomodoro-config", DEFAULT_CFG);
   const [stats, setStats] = useStored("pomodoro-stats", { day: today(), count: 0 });
   const [st, setSt] = useStored("pomodoro", {
@@ -120,17 +121,20 @@ export function PomodoroView() {
     }
   }, [left]);
 
-  useEffect(() => {
-    if (!st.endAt) return;
-    document.title = `${formatDuration(left)} · ${t(`pomodoro.${st.mode}`)}`;
-    return () => void (document.title = baseTitle.value);
-  });
+  useStatus(
+    "pomodoro",
+    st.endAt
+      ? { text: `${formatDuration(left)} · ${t(`pomodoro.${st.mode}`)}`, progress: 1 - left / st.duration }
+      : null,
+  );
 
   const toggle = () => {
     unlockAudio();
     requestNotifications();
     setSt({ ...st, ...toggleCountdown(st, Date.now()) });
   };
+
+  useShortcuts(active, { toggle, reset: () => go(st.mode), skip: () => next(false) });
 
   const saveCfg = (c: Config) => {
     setCfg(c);

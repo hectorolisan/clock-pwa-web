@@ -18,6 +18,8 @@ import {
 } from "@/lib/timer";
 import { t } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { useShortcuts } from "@/hooks/useShortcuts";
+import { useStatus } from "@/lib/status";
 
 const PRESETS = [1, 5, 10, 15, 20, 30, 60];
 const MAX = 6;
@@ -26,7 +28,7 @@ type Timer = Countdown & { id: number; n: number };
 
 const newTimer = (n: number, duration = 5 * MINUTE): Timer => ({ id: Date.now(), n, ...createCountdown(duration) });
 
-export function TimerView() {
+export function TimerView({ active }: { active: boolean }) {
   const [st, setSt] = useStored("timers", { items: [newTimer(1)], selected: 0 });
   const { items } = st;
   const sel = items.find((x) => x.id === st.selected) ?? items[0];
@@ -54,6 +56,22 @@ export function TimerView() {
     requestNotifications();
     update(sel.id, (x) => ({ ...x, ...toggleCountdown(x, Date.now()) }));
   };
+
+  const resetSel = () => update(sel.id, (x) => reset(x) as Timer);
+
+  useShortcuts(active, { toggle, reset: resetSel });
+
+  const running = sel.endAt ? sel : items.find((x) => x.endAt);
+  const runLeft = running ? remaining(running, now) : 0;
+  useStatus(
+    "timer",
+    running
+      ? {
+          text: `${formatDuration(runLeft)} · ${t("timer.name", { n: running.n })}`,
+          progress: 1 - runLeft / running.duration,
+        }
+      : null,
+  );
 
   const add = () => {
     const n = Math.max(0, ...items.map((x) => x.n)) + 1;
@@ -98,12 +116,7 @@ export function TimerView() {
       </Display>
 
       <div class="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon-lg"
-          aria-label={t("action.reset")}
-          onClick={() => update(sel.id, (x) => reset(x) as Timer)}
-        >
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} onClick={resetSel}>
           <RotateCcw />
         </Button>
         <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>

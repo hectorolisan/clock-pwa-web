@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { lapsToCsv, splits as getSplits } from "@/lib/timer";
 import { t } from "@/lib/i18n";
 import { announce } from "@/lib/announce";
+import { useShortcuts } from "@/hooks/useShortcuts";
+import { useStatus } from "@/lib/status";
 
 const fmt = (ms: number) => formatDuration(ms, { hours: true, centis: true });
 
@@ -19,7 +21,7 @@ function download(laps: number[]) {
   URL.revokeObjectURL(a.href);
 }
 
-export function StopwatchView() {
+export function StopwatchView({ active }: { active: boolean }) {
   const [st, setSt] = useStored("stopwatch", {
     startAt: null as number | null,
     elapsed: 0,
@@ -31,7 +33,16 @@ export function StopwatchView() {
 
   const toggle = () => setSt(st.startAt ? { ...st, startAt: null, elapsed: total } : { ...st, startAt: Date.now() });
 
-  const lap = () => setSt({ ...st, laps: [...st.laps, total] });
+  const lap = () => {
+    if (!st.startAt) return;
+    setSt({ ...st, laps: [...st.laps, total] });
+    announce(t("stopwatch.lapAdded", { n: st.laps.length + 1, time: fmt(total - (st.laps.at(-1) ?? 0)) }));
+  };
+
+  const resetAll = () => setSt({ startAt: null, elapsed: 0, laps: [] });
+
+  useShortcuts(active, { toggle, lap, reset: resetAll });
+  useStatus("stopwatch", st.startAt ? { text: `${formatDuration(total)} · ${t("tab.stopwatch")}` } : null);
 
   const splits = getSplits(st.laps);
   const best = splits.length > 1 && new Set(splits).size > 1 ? Math.min(...splits) : -1;
@@ -45,13 +56,7 @@ export function StopwatchView() {
       </Display>
 
       <div class="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon-lg"
-          aria-label={t("action.reset")}
-          disabled={!total}
-          onClick={() => setSt({ startAt: null, elapsed: 0, laps: [] })}
-        >
+        <Button variant="ghost" size="icon-lg" aria-label={t("action.reset")} disabled={!total} onClick={resetAll}>
           <RotateCcw />
         </Button>
         <Button size="lg" className="h-12 w-40 text-base" onClick={toggle}>

@@ -45,6 +45,7 @@ const es = {
   "settings.notificationsOff": "Bloqueadas en el navegador",
   "settings.notificationsEnable": "Activar",
   "settings.shortcuts": "Atajos de teclado",
+  "settings.space": "Espacio",
 
   "sound.chime": "Xilófono",
   "sound.bell": "Campana",
@@ -175,6 +176,7 @@ const en: Record<Key, string> = {
   "settings.notificationsOff": "Blocked in the browser",
   "settings.notificationsEnable": "Enable",
   "settings.shortcuts": "Keyboard shortcuts",
+  "settings.space": "Space",
 
   "sound.chime": "Xylophone",
   "sound.bell": "Bell",

@@ -1,3 +1,4 @@
+import { Fragment } from "preact";
 import { Settings as SettingsIcon, Volume2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,15 @@ import { Button } from "@/components/ui/button";
 const OPTIONS = [
   { key: "h24", label: "settings.h24", hint: "settings.h24Hint" },
   { key: "seconds", label: "settings.seconds", hint: "settings.secondsHint" },
+  { key: "wakeLock", label: "settings.wakeLock", hint: "settings.wakeLockHint" },
+] as const;
+
+const SHORTCUTS = [
+  [["Espacio", "K"], "shortcut.toggle"],
+  [["R"], "shortcut.reset"],
+  [["L"], "shortcut.lap"],
+  [["N"], "shortcut.skip"],
+  [["1", "6"], "shortcut.tabs"],
 ] as const;
 
 const set = (patch: Partial<typeof settings.value>) => (settings.value = { ...settings.value, ...patch });
@@ -41,14 +51,13 @@ export default function Settings() {
                 {t(o.label)}
                 <span class="text-xs font-normal text-muted-foreground">{t(o.hint)}</span>
               </span>
-              <Switch
-                checked={settings.value[o.key]}
-                onCheckedChange={(v) => set({ [o.key]: v })}
-              />
+              <Switch checked={settings.value[o.key]} onCheckedChange={(v) => set({ [o.key]: v })} />
             </Label>
           ))}
           <div class="flex items-center justify-between gap-4 py-3">
-            <span class="text-sm font-medium" id="lang-label">{t("settings.language")}</span>
+            <span class="text-sm font-medium" id="lang-label">
+              {t("settings.language")}
+            </span>
             <div role="radiogroup" aria-labelledby="lang-label" class="flex gap-1">
               {(Object.keys(LANGS) as Lang[]).map((l) => (
                 <Button
@@ -130,6 +139,28 @@ export default function Settings() {
               ))}
             </div>
           </fieldset>
+          <section aria-labelledby="shortcuts-title" class="flex flex-col gap-3 py-3">
+            <h3 id="shortcuts-title" class="text-sm font-medium">
+              {t("settings.shortcuts")}
+            </h3>
+            <dl class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 text-sm">
+              {SHORTCUTS.map(([keys, label]) => (
+                <Fragment key={label}>
+                  <dt class="flex gap-1">
+                    {keys.map((k, i) => (
+                      <Fragment key={k}>
+                        {i > 0 && <span class="text-muted-foreground">{label === "shortcut.tabs" ? "–" : "/"}</span>}
+                        <kbd class="rounded border bg-muted px-1.5 font-mono text-xs">
+                          {k === "Espacio" ? t("settings.space") : k}
+                        </kbd>
+                      </Fragment>
+                    ))}
+                  </dt>
+                  <dd class="text-muted-foreground">{t(label)}</dd>
+                </Fragment>
+              ))}
+            </dl>
+          </section>
         </div>
       </DialogContent>
     </Dialog>
