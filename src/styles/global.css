@@ -103,6 +103,14 @@
   html.dark {
     color-scheme: dark;
     }
+  input[type="number"] {
+    appearance: textfield;
+    }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+    }
   ::selection {
     background: color-mix(in oklab, var(--primary) 20%, transparent);
     }
