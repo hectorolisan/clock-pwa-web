@@ -1,8 +1,9 @@
-import { Settings as SettingsIcon } from "lucide-react";
+import { Settings as SettingsIcon, Volume2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { settings } from "@/lib/settings";
+import { SOUNDS, settings, type Sound } from "@/lib/settings";
+import { beep, unlockAudio } from "@/lib/alert";
 import { COLORS, color } from "@/lib/theme";
 import { LANGS, lang, t, type Lang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,13 @@ const OPTIONS = [
   { key: "seconds", label: "settings.seconds", hint: "settings.secondsHint" },
 ] as const;
 
+const set = (patch: Partial<typeof settings.value>) => (settings.value = { ...settings.value, ...patch });
+
+const test = () => {
+  unlockAudio();
+  beep();
+};
+
 export default function Settings() {
   return (
     <Dialog>
@@ -19,10 +27,10 @@ export default function Settings() {
         aria-label={t("header.settings")}
         className="ml-auto inline-flex h-8 items-center justify-center gap-2 rounded-lg px-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       >
-        <SettingsIcon className="size-4" />
+        <SettingsIcon className="size-4" aria-hidden="true" />
         <span class="hidden sm:inline">{t("header.settings")}</span>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-sm" aria-describedby={undefined}>
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-sm" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle className="font-pixel text-xl font-normal">{t("header.settings")}</DialogTitle>
         </DialogHeader>
@@ -35,7 +43,7 @@ export default function Settings() {
               </span>
               <Switch
                 checked={settings.value[o.key]}
-                onCheckedChange={(v) => (settings.value = { ...settings.value, [o.key]: v })}
+                onCheckedChange={(v) => set({ [o.key]: v })}
               />
             </Label>
           ))}
@@ -54,6 +62,49 @@ export default function Settings() {
                   {LANGS[l]}
                 </Button>
               ))}
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 py-3">
+            <div class="flex items-center justify-between gap-4">
+              <label for="sound" class="text-sm font-medium">
+                {t("settings.sound")}
+              </label>
+              <div class="flex items-center gap-1">
+                <select
+                  id="sound"
+                  value={settings.value.sound}
+                  onChange={(e) => set({ sound: e.currentTarget.value as Sound })}
+                  class="h-8 rounded-lg border bg-background px-2 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                >
+                  {SOUNDS.map((x) => (
+                    <option key={x} value={x}>
+                      {t(`sound.${x}`)}
+                    </option>
+                  ))}
+                </select>
+                <Button variant="ghost" size="icon-sm" aria-label={t("settings.test")} onClick={test}>
+                  <Volume2 />
+                </Button>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <label for="volume" class="text-sm font-medium">
+                {t("settings.volume")}
+              </label>
+              <input
+                id="volume"
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={settings.value.volume}
+                aria-valuetext={`${Math.round(settings.value.volume * 100)} %`}
+                onChange={(e) => {
+                  set({ volume: Number(e.currentTarget.value) });
+                  test();
+                }}
+                class="w-40 accent-primary"
+              />
             </div>
           </div>
           <fieldset class="flex flex-col gap-3 py-3">
