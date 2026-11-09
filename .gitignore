@@ -1,0 +1,26 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# lock
+package-lock.json
+bun.lockb
+bun.lock
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# vercel
+.vercel/
+
+# claude
+.claude/

@@ -1,0 +1,19 @@
+{
+  "name": "clock-web",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^6.1.2",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.7",
+    "preact": "^11.2.0",
+    "tailwindcss": "^4.3.5"
+  }
+}
