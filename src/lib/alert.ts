@@ -52,9 +52,14 @@ export function unlockAudio() {
   void ctx.resume();
 }
 
+/** Permiso de notificaciones como señal para que la UI reaccione */
+export const notifyPermission = signal<NotificationPermission | "unsupported">(
+  "Notification" in window ? Notification.permission : "unsupported",
+);
+
 export function requestNotifications() {
-  if ("Notification" in window && Notification.permission === "default") {
-    void Notification.requestPermission();
+  if (notifyPermission.value === "default") {
+    void Notification.requestPermission().then((p) => (notifyPermission.value = p));
   }
 }
 

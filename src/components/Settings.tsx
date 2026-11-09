@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { SOUNDS, settings, type Sound } from "@/lib/settings";
-import { beep, unlockAudio } from "@/lib/alert";
+import { beep, notifyPermission, requestNotifications, unlockAudio } from "@/lib/alert";
 import { COLORS, color } from "@/lib/theme";
 import { LANGS, lang, t, type Lang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
@@ -116,6 +116,25 @@ export default function Settings() {
               />
             </div>
           </div>
+          {notifyPermission.value !== "unsupported" && (
+            <div class="flex items-center justify-between gap-4 py-3">
+              <span class="flex flex-col gap-1 text-sm font-medium">
+                {t("settings.notifications")}
+                <span class="text-xs font-normal text-muted-foreground">{t("settings.notificationsHint")}</span>
+              </span>
+              {notifyPermission.value === "default" ? (
+                <Button size="sm" variant="outline" onClick={requestNotifications}>
+                  {t("settings.notificationsEnable")}
+                </Button>
+              ) : (
+                <span class="shrink-0 font-mono text-xs text-muted-foreground">
+                  {notifyPermission.value === "granted"
+                    ? t("settings.notificationsOn")
+                    : t("settings.notificationsOff")}
+                </span>
+              )}
+            </div>
+          )}
           <fieldset class="flex flex-col gap-3 py-3">
             <legend class="mb-3 text-sm font-medium">{t("settings.color")}</legend>
             <div class="flex flex-wrap gap-2">
