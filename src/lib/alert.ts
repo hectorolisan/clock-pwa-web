@@ -6,20 +6,32 @@ export const alertMessage = signal<string | null>(null);
 let ctx: AudioContext | undefined;
 let loop: ReturnType<typeof setInterval> | undefined;
 
-export function beep(times = 3) {
+// Arpegio Do mayor (C6 E6 G6 C7)
+const NOTES = [1047, 1319, 1568, 2093];
+
+/** Golpe de xilófono: fundamental + parcial a ~3x con caída rápida */
+function strike(at: number, freq: number) {
+  for (const [mult, vol, decay] of [
+    [1, 0.25, 0.6],
+    [3.9, 0.06, 0.15],
+  ]) {
+    const osc = ctx!.createOscillator();
+    const gain = ctx!.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq * mult;
+    gain.gain.setValueAtTime(0, at);
+    gain.gain.linearRampToValueAtTime(vol, at + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, at + decay);
+    osc.connect(gain).connect(ctx!.destination);
+    osc.start(at);
+    osc.stop(at + decay);
+  }
+}
+
+export function beep() {
   ctx ??= new AudioContext();
   const t0 = ctx.currentTime;
-  for (let i = 0; i < times; i++) {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "square";
-    osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.08, t0 + i * 0.25);
-    gain.gain.setValueAtTime(0, t0 + i * 0.25 + 0.12);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(t0 + i * 0.25);
-    osc.stop(t0 + i * 0.25 + 0.15);
-  }
+  NOTES.forEach((f, i) => strike(t0 + i * 0.14, f));
 }
 
 /** Desbloquea audio en iOS/Safari: llamar desde un gesto del usuario */
@@ -38,7 +50,7 @@ export function startAlert(message: string) {
   alertMessage.value = message;
   clearInterval(loop);
   beep();
-  loop = setInterval(beep, 1500);
+  loop = setInterval(beep, 2000);
   setTimeout(stopAlert, 60_000);
   if ("Notification" in window && Notification.permission === "granted") {
     navigator.serviceWorker?.ready
