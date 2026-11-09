@@ -1,5 +1,6 @@
 ---
 import { Clock, Moon, Sun } from "lucide-react";
+import Settings from "@/components/Settings";
 ---
 
 <header class="border-b">
@@ -9,11 +10,15 @@ import { Clock, Moon, Sun } from "lucide-react";
       <span class="font-mono text-xs">clock-web</span>
     </a>
 
+    <Settings client:only="preact">
+      <span slot="fallback" class="ml-auto size-8"></span>
+    </Settings>
+
     <button
       type="button"
       data-theme-toggle
       aria-label="Cambiar tema"
-      class="ml-auto inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      class="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
     >
       <Moon className="size-4 dark:hidden" />
       <Sun className="hidden size-4 dark:block" />
