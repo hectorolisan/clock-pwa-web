@@ -1,4 +1,3 @@
-import { Fragment } from "preact";
 import { Settings as SettingsIcon, Volume2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -15,14 +14,6 @@ const OPTIONS = [
   { key: "wakeLock", label: "settings.wakeLock", hint: "settings.wakeLockHint" },
 ] as const;
 
-const SHORTCUTS = [
-  [["Espacio", "K"], "shortcut.toggle"],
-  [["R"], "shortcut.reset"],
-  [["L"], "shortcut.lap"],
-  [["N"], "shortcut.skip"],
-  [["1", "6"], "shortcut.tabs"],
-] as const;
-
 const set = (patch: Partial<typeof settings.value>) => (settings.value = { ...settings.value, ...patch });
 
 const test = () => {
@@ -35,7 +26,7 @@ export default function Settings() {
     <Dialog>
       <DialogTrigger
         aria-label={t("header.settings")}
-        className="ml-auto inline-flex h-8 items-center justify-center gap-2 rounded-lg px-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="inline-flex h-8 items-center justify-center gap-2 rounded-lg px-2 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       >
         <SettingsIcon className="size-4" aria-hidden="true" />
         <span class="hidden sm:inline">{t("header.settings")}</span>
@@ -137,13 +128,13 @@ export default function Settings() {
           )}
           <fieldset class="flex flex-col gap-3 py-3">
             <legend class="mb-3 text-sm font-medium">{t("settings.color")}</legend>
-            <div class="flex flex-wrap gap-2">
+            <div class="grid w-fit grid-cols-6 gap-3">
               {COLORS.map((c) => (
                 <label
                   key={c}
                   data-color={c}
                   title={c}
-                  class="relative size-7 cursor-pointer rounded-full bg-primary ring-offset-2 ring-offset-background has-checked:ring-2 has-checked:ring-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
+                  class="relative size-9 cursor-pointer rounded-full bg-primary ring-offset-2 ring-offset-background has-checked:ring-2 has-checked:ring-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
                 >
                   <input
                     type="radio"
@@ -158,28 +149,6 @@ export default function Settings() {
               ))}
             </div>
           </fieldset>
-          <section aria-labelledby="shortcuts-title" class="flex flex-col gap-3 py-3">
-            <h3 id="shortcuts-title" class="text-sm font-medium">
-              {t("settings.shortcuts")}
-            </h3>
-            <dl class="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 text-sm">
-              {SHORTCUTS.map(([keys, label]) => (
-                <Fragment key={label}>
-                  <dt class="flex gap-1">
-                    {keys.map((k, i) => (
-                      <Fragment key={k}>
-                        {i > 0 && <span class="text-muted-foreground">{label === "shortcut.tabs" ? "–" : "/"}</span>}
-                        <kbd class="rounded border bg-muted px-1.5 font-mono text-xs">
-                          {k === "Espacio" ? t("settings.space") : k}
-                        </kbd>
-                      </Fragment>
-                    ))}
-                  </dt>
-                  <dd class="text-muted-foreground">{t(label)}</dd>
-                </Fragment>
-              ))}
-            </dl>
-          </section>
         </div>
       </DialogContent>
     </Dialog>

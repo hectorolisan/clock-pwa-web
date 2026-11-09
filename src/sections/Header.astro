@@ -1,6 +1,7 @@
 ---
 import { Clock, Moon, Sun } from "lucide-react";
 import Settings from "@/components/Settings";
+import Shortcuts from "@/components/Shortcuts";
 ---
 
 <header class="border-b">
@@ -10,8 +11,12 @@ import Settings from "@/components/Settings";
       <span class="font-mono text-xs">clock-pwa-web</span>
     </a>
 
-    <Settings client:only="preact">
+    <Shortcuts client:only="preact">
       <span slot="fallback" class="ml-auto h-8"></span>
+    </Shortcuts>
+
+    <Settings client:only="preact">
+      <span slot="fallback" class="h-8"></span>
     </Settings>
 
     <button
