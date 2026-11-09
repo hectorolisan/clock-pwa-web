@@ -5,7 +5,10 @@ import tailwindcss from "@tailwindcss/vite";
 import { AstroPWAIntegration } from "@vite-pwa/astro";
 
 // GitHub Pages (CI) pasa "/clock-pwa-web"; en local queda "/"
-const base = `${process.env.PAGES_BASE_PATH ?? ""}/`;
+const { env } = /** @type {{ process: { env: Record<string, string | undefined> } }} */ (
+  /** @type {unknown} */ (globalThis)
+).process;
+const base = `${env.PAGES_BASE_PATH ?? ""}/`;
 
 /** @param {string} name @param {string} id */
 const shortcut = (name, id) => ({ name, short_name: name, url: `${base}#${id}` });
